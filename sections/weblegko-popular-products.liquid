@@ -8,7 +8,6 @@
         <h2 class="tw:text-[2.4rem] tw:sm:text-[4rem] tw:font-medium tw:tracking-[-0.04em] tw:leading-[1.33] tw:lg:leading-[1.2] tw:text-center">
           {{ section.settings.heading }}
         </h2>
-
         {%- if section.settings.description != blank -%}
           <div class="tw:mx-auto tw:inline-flex tw:items-center tw:justify-center tw:gap-2 tw:py-[0.8rem] tw:px-[2rem] tw:bg-[#e5dccb] tw:rounded-full">
             <span class="tw:pt-1 tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:text-center">
@@ -24,8 +23,12 @@
       {%- if section.settings.collection != blank -%}
         {%- for product in section.settings.collection.products limit: 6 -%}
           {%- assign variant = product.selected_or_first_available_variant -%}
-          {%- assign product_form_id = 'product-form-' | append: section.id | append: '-' | append: product.id -%}
-          
+          {%- assign product_form_id = 'quick-add-' | append: section.id | append: '-' | append: product.id -%}
+          {%- assign qty_rules = false -%}
+          {%- if variant.quantity_rule.min > 1 or variant.quantity_rule.max != null or variant.quantity_rule.increment > 1 -%}
+            {%- assign qty_rules = true -%}
+          {%- endif -%}
+
           <div
             class="tw:flex tw:flex-col tw:h-full tw:hover:scale-[101%] tw:hover:shadow-lg tw:transition-all tw:duration-300 tw:group tw:px-[0.8rem] tw:pt-[0.8rem] tw:pb-[1.6rem] tw:rounded-[1.6rem] tw:bg-white tw:overflow-hidden"
             data-product-id="{{ product.id }}"
@@ -74,11 +77,7 @@
               <div class="tw:flex tw:flex-nowrap tw:gap-[0.8rem] tw:mt-[0.8rem] tw:mb-[1.4rem]">
                 {%- if product.compare_at_price > product.price -%}
                   {%- assign discount = product.compare_at_price | minus: product.price -%}
-                  {%- assign discount_percentage = discount
-                    | times: 100.0
-                    | divided_by: product.compare_at_price
-                    | round
-                  -%}
+                  {%- assign discount_percentage = discount | times: 100.0 | divided_by: product.compare_at_price | round -%}
                   <span class="tw:text-[2.4rem] tw:font-medium tw:whitespace-nowrap tw:text-grayscale-950 tw:leading-[1.33] tw:tracking-[-0.01em]">
                     <span>From</span>
                     <span class="tw:text-additional-red">
@@ -98,39 +97,96 @@
                 {%- endif -%}
               </div>
 
-              <!-- ===== КНОПКА ADD TO CART (СКОПИРОВАНА ИЗ card-product.liquid) ===== -->
+              <!-- ===== Блок кнопок (скопирован из card-product.liquid) ===== -->
               <div class="tw:mt-auto">
-                <product-form data-product-id="{{ product.id }}">
-                  {%- form 'product',
-                    product,
-                    id: product_form_id,
-                    class: 'form',
-                    novalidate: 'novalidate',
-                    data-type: 'add-to-cart-form'
-                  -%}
-                    <input
-                      type="hidden"
-                      name="id"
-                      value="{{ variant.id }}"
-                      {% unless variant.available %}disabled{% endunless %}
-                    >
+                {%- if product.variants_count > 1 or qty_rules -%}
+                  <modal-opener data-modal="#QuickAdd-{{ product.id }}">
                     <button
+                      id="{{ product_form_id }}-submit"
                       type="submit"
                       name="add"
-                      class="tw:w-full tw:border-0 tw:cursor-pointer tw:bg-golden tw:hover:bg-goldendark tw:flex tw:items-center tw:justify-center tw:rounded-full tw:transition-colors tw:duration-300 tw:pt-1 tw:px-[1.6rem] tw:h-[4rem] tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium"
-                      {% unless variant.available %}disabled{% endunless %}
+                      class="
+                        tw:w-full tw:border-0 tw:flex tw:items-center tw:justify-center tw:rounded-full tw:transition-colors tw:duration-300
+                        tw:pt-1 tw:px-[1.6rem] tw:h-[4rem] tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium
+                        tw:bg-golden hover:tw:bg-goldendark tw:cursor-pointer
+                      "
+                      aria-haspopup="dialog"
+                      aria-labelledby="{{ product_form_id }}-submit title-{{ section.id }}-{{ product.id }}"
+                      data-product-url="{{ product.url }}"
                     >
-                      <span>
-                        {%- if variant.available -%}
-                          Add To Cart
-                        {%- else -%}
-                          Sold Out
-                        {%- endif -%}
-                      </span>
+                      {{ 'products.product.choose_options' | t }}
                       {%- render 'loading-spinner' -%}
                     </button>
-                  {%- endform -%}
-                </product-form>
+                  </modal-opener>
+                  <quick-add-modal id="QuickAdd-{{ product.id }}" class="quick-add-modal">
+                    <div
+                      role="dialog"
+                      aria-label="{{ 'products.product.choose_product_options' | t: product_name: product.title | escape }}"
+                      aria-modal="true"
+                      class="quick-add-modal__content global-settings-popup"
+                      tabindex="-1"
+                    >
+                      <button
+                        id="ModalClose-{{ product.id }}"
+                        type="button"
+                        class="quick-add-modal__toggle"
+                        aria-label="{{ 'accessibility.close' | t }}"
+                      >
+                        {{- 'icon-close.svg' | inline_asset_content -}}
+                      </button>
+                      <div id="QuickAddInfo-{{ product.id }}" class="quick-add-modal__content-info"></div>
+                    </div>
+                  </quick-add-modal>
+                {%- else -%}
+                  <product-form data-section-id="{{ section.id }}">
+                    {%- form 'product',
+                      product,
+                      id: product_form_id,
+                      class: 'form',
+                      novalidate: 'novalidate',
+                      data-type: 'add-to-cart-form'
+                    -%}
+                      <input
+                        type="hidden"
+                        name="id"
+                        value="{{ variant.id }}"
+                        class="product-variant-id"
+                        {% unless variant.available %}disabled{% endunless %}
+                      >
+                      <button
+                        id="{{ product_form_id }}-submit"
+                        type="submit"
+                        name="add"
+                        class="
+                          tw:w-full tw:border-0 tw:flex tw:items-center tw:justify-center tw:rounded-full tw:transition-colors tw:duration-300
+                          tw:pt-1 tw:px-[1.6rem] tw:h-[4rem] tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium
+                          {% if variant.available %}
+                            tw:bg-golden hover:tw:bg-goldendark tw:cursor-pointer
+                          {% else %}
+                            tw:bg-gray-400 tw:cursor-not-allowed tw:opacity-70
+                          {% endif %}
+                        "
+                        aria-haspopup="dialog"
+                        aria-labelledby="{{ product_form_id }}-submit title-{{ section.id }}-{{ product.id }}"
+                        aria-live="polite"
+                        data-sold-out-message="true"
+                        {% unless variant.available %}disabled{% endunless %}
+                      >
+                        <span>
+                          {%- if variant.available -%}
+                            {{ 'products.product.add_to_cart' | t }}
+                          {%- else -%}
+                            {{ 'products.product.sold_out' | t }}
+                          {%- endif -%}
+                        </span>
+                        <span class="sold-out-message hidden">
+                          {{ 'products.product.sold_out' | t }}
+                        </span>
+                        {%- render 'loading-spinner' -%}
+                      </button>
+                    {%- endform -%}
+                  </product-form>
+                {%- endif -%}
               </div>
             </div>
           </div>
