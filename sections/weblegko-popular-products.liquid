@@ -24,6 +24,8 @@
       {%- if section.settings.collection != blank -%}
         {%- for product in section.settings.collection.products limit: 6 -%}
           {%- assign variant = product.selected_or_first_available_variant -%}
+          {%- assign product_form_id = 'product-form-' | append: section.id | append: '-' | append: product.id -%}
+          
           <div
             class="tw:flex tw:flex-col tw:h-full tw:hover:scale-[101%] tw:hover:shadow-lg tw:transition-all tw:duration-300 tw:group tw:px-[0.8rem] tw:pt-[0.8rem] tw:pb-[1.6rem] tw:rounded-[1.6rem] tw:bg-white tw:overflow-hidden"
             data-product-id="{{ product.id }}"
@@ -96,21 +98,39 @@
                 {%- endif -%}
               </div>
 
-              <!-- Форма добавления (AJAX) -->
+              <!-- ===== КНОПКА ADD TO CART (СКОПИРОВАНА ИЗ card-product.liquid) ===== -->
               <div class="tw:mt-auto">
-                <form action="/cart/add" method="post" class="ajax-add-to-cart">
-                  <input type="hidden" name="id" value="{{ variant.id }}">
-                  <button
-                    type="submit"
-                    class="
-                      tw:w-full tw:border-0 tw:cursor-pointer
-                      tw:bg-golden tw:hover:bg-goldendark tw:flex tw:items-center tw:justify-center tw:rounded-full tw:transition-colors tw:duration-300
-                      tw:pt-1 tw:px-[1.6rem] tw:h-[4rem] tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium
-                    "
-                  >
-                    Add To Cart
-                  </button>
-                </form>
+                <product-form data-product-id="{{ product.id }}">
+                  {%- form 'product',
+                    product,
+                    id: product_form_id,
+                    class: 'form',
+                    novalidate: 'novalidate',
+                    data-type: 'add-to-cart-form'
+                  -%}
+                    <input
+                      type="hidden"
+                      name="id"
+                      value="{{ variant.id }}"
+                      {% unless variant.available %}disabled{% endunless %}
+                    >
+                    <button
+                      type="submit"
+                      name="add"
+                      class="tw:w-full tw:border-0 tw:cursor-pointer tw:bg-golden tw:hover:bg-goldendark tw:flex tw:items-center tw:justify-center tw:rounded-full tw:transition-colors tw:duration-300 tw:pt-1 tw:px-[1.6rem] tw:h-[4rem] tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium"
+                      {% unless variant.available %}disabled{% endunless %}
+                    >
+                      <span>
+                        {%- if variant.available -%}
+                          Add To Cart
+                        {%- else -%}
+                          Sold Out
+                        {%- endif -%}
+                      </span>
+                      {%- render 'loading-spinner' -%}
+                    </button>
+                  {%- endform -%}
+                </product-form>
               </div>
             </div>
           </div>
