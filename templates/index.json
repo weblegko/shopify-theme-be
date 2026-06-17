@@ -173,6 +173,51 @@
         "description": "Premium supplements for your health",
         "collection": "beauty"
       }
+    },
+    "weblegko_video_eik4Mn": {
+      "type": "weblegko-video",
+      "name": "WEBLEGKO VIDEO",
+      "settings": {
+        "video": "shopify://files/videos/drberg.mp4",
+        "cover_image": "shopify://shop_images/drberg-video-poster.webp",
+        "description": "",
+        "enable_video_looping": false
+      }
+    },
+    "weblegko_doctor_quote_i8hM8n": {
+      "type": "weblegko-doctor-quote",
+      "name": "WEBLEGKO DOCTOR QUOTE",
+      "settings": {
+        "doctor_image": "shopify://shop_images/drberg-quote.webp",
+        "quote_text": "<p>Dr. Eric Berg is a renowned expert in healthy ketosis and intermittent fasting. With over 15 million subscribers worldwide, Dr. Berg has dedicated his career to helping people achieve optimal health through natural nutrition.</p><p>All supplements are scientifically formulated with the highest quality natural ingredients, ensuring maximum effectiveness and safety.</p>",
+        "button_label": "Learn More",
+        "button_link": ""
+      }
+    },
+    "weblegko_secondary_slider_HkAqYJ": {
+      "type": "weblegko-secondary-slider",
+      "blocks": {
+        "slide_tHDn9m": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Grain_Free_Crackers_29.04.26_3200x1295px.webp",
+            "link": ""
+          }
+        },
+        "slide_QeaRMr": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/drberg-cosmetic.webp",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_tHDn9m",
+        "slide_QeaRMr"
+      ],
+      "name": "WEBLEGKO SECONDARY SLIDER",
+      "settings": {}
     }
   },
   "order": [
@@ -181,6 +226,9 @@
     "weblegko_features_aHX3JD",
     "weblegko_premium_products_L3LbfF",
     "weblegko_why_choose_us_xrdXrA",
-    "weblegko_popular_products_JfXXxF"
+    "weblegko_popular_products_JfXXxF",
+    "weblegko_video_eik4Mn",
+    "weblegko_doctor_quote_i8hM8n",
+    "weblegko_secondary_slider_HkAqYJ"
   ]
 }
