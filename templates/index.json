@@ -130,22 +130,25 @@
         "card_YTVPE8": {
           "type": "card",
           "settings": {
-            "title": "Expert Team",
-            "text": "<p>Our professionals provide top-tier service and unparalleled industry experience.</p>"
+            "icon_image": "shopify://shop_images/shield.webp",
+            "title": "GMP-certified quality",
+            "text": "<p>Every batch is manufactured to pharmaceutical-grade standards, ensuring maximum safety and purity</p>"
           }
         },
         "card_Lamzn8": {
           "type": "card",
           "settings": {
-            "title": "Expert Team",
-            "text": "<p>Our professionals provide top-tier service and unparalleled industry experience.</p>"
+            "icon_image": "shopify://shop_images/ai-star.webp",
+            "title": "Premium ingredients",
+            "text": "<p>Our ingredients are sourced from reliable global partners who share our commitment to quality</p>"
           }
         },
         "card_p69b7M": {
           "type": "card",
           "settings": {
-            "title": "Expert Team",
-            "text": "<p>Our professionals provide top-tier service and unparalleled industry experience.</p>"
+            "icon_image": "shopify://shop_images/lightning.webp",
+            "title": "Maximum bioavailability",
+            "text": "<p>Each formula is meticulously crafted to enhance absorption<br/>and deliver optimal results</p>"
           }
         }
       },
