@@ -218,6 +218,84 @@
       ],
       "name": "WEBLEGKO SECONDARY SLIDER",
       "settings": {}
+    },
+    "weblegko_resources_AttJMD": {
+      "type": "weblegko-resources",
+      "blocks": {
+        "resource_LWBPtE": {
+          "type": "resource",
+          "settings": {
+            "resource_image": "shopify://shop_images/essential-definitions.webp",
+            "badge": "Free PDF Document",
+            "title": "Essential Definitions for Healthy Living",
+            "publish_date": "2025-06-20",
+            "category": "Health Resources",
+            "button_label": "Learn More",
+            "button_link": ""
+          }
+        },
+        "resource_hxP37K": {
+          "type": "resource",
+          "settings": {
+            "resource_image": "shopify://shop_images/how-junk-foods.webp",
+            "badge": "Free PDF Document",
+            "title": "Essential Definitions for Healthy Living",
+            "publish_date": "2025-06-20",
+            "category": "Health Resources",
+            "button_label": "Learn More",
+            "button_link": ""
+          }
+        },
+        "resource_D6xyLe": {
+          "type": "resource",
+          "settings": {
+            "resource_image": "shopify://shop_images/how-to-make-yogurt.webp",
+            "badge": "Free PDF Document",
+            "title": "Essential Definitions for Healthy Living",
+            "publish_date": "2025-06-20",
+            "category": "Health Resources",
+            "button_label": "Learn More",
+            "button_link": ""
+          }
+        },
+        "resource_N8zrUb": {
+          "type": "resource",
+          "settings": {
+            "resource_image": "shopify://shop_images/beginners-guide-to-healthy.webp",
+            "badge": "Free PDF Document",
+            "title": "Essential Definitions for Healthy Living",
+            "publish_date": "2025-06-20",
+            "category": "Health Resources",
+            "button_label": "Learn More",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "resource_LWBPtE",
+        "resource_hxP37K",
+        "resource_D6xyLe",
+        "resource_N8zrUb"
+      ],
+      "name": "WEBLEGKO RESOURCES",
+      "settings": {
+        "heading": "Health Resources",
+        "description": "Free Guides for Better Living"
+      }
+    },
+    "weblegko_newsletter_banner_QRJJRq": {
+      "type": "weblegko-newsletter-banner",
+      "name": "WEBLEGKO NEWSLETTER",
+      "settings": {
+        "bg_image": "shopify://shop_images/whychooseus-background.webp",
+        "heading_line_1": "Stay",
+        "heading_line_2": "Updated",
+        "avatar": "shopify://shop_images/drberg-avatar.webp",
+        "doctor_name": "Dr. Eric Berg",
+        "doctor_role": "Health & Nutrition Expert",
+        "text": "Subscribe to our newsletter and receive exclusive offers and news! Fill out the form below or message us to stay updated on all the great deals and special offers.",
+        "privacy_link": ""
+      }
     }
   },
   "order": [
@@ -229,6 +307,8 @@
     "weblegko_popular_products_JfXXxF",
     "weblegko_video_eik4Mn",
     "weblegko_doctor_quote_i8hM8n",
-    "weblegko_secondary_slider_HkAqYJ"
+    "weblegko_secondary_slider_HkAqYJ",
+    "weblegko_resources_AttJMD",
+    "weblegko_newsletter_banner_QRJJRq"
   ]
 }
