@@ -106,11 +106,21 @@
       ],
       "name": "WEBLEGKO FEATURES",
       "settings": {}
+    },
+    "weblegko_premium_products_L3LbfF": {
+      "type": "weblegko-premium-products",
+      "name": "WEBLEGKO PREMIUM",
+      "settings": {
+        "heading": "Premium Products",
+        "description": "Premium supplements for your health",
+        "collection": "b-vitamins"
+      }
     }
   },
   "order": [
     "weblegko_promo_slider_EQLPry",
     "weblegko_doctor_grid_W8WXMT",
-    "weblegko_features_aHX3JD"
+    "weblegko_features_aHX3JD",
+    "weblegko_premium_products_L3LbfF"
   ]
 }
