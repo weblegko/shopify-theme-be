@@ -454,6 +454,16 @@
         "rating_score": "4.8",
         "review_count": "2,847"
       }
+    },
+    "weblegko_about_doctor_4w33Hd": {
+      "type": "weblegko-about-doctor",
+      "name": "WEBLEGKO ABOUT DOCTOR",
+      "settings": {
+        "heading": "More About Dr. Berg Supplements",
+        "text": "<p>Dr. Berg's supplements are formulated with the highest quality natural ingredients to support your health and wellness journey. Each product is carefully crafted based on years of research and clinical experience.</p><p>As the official UK distributor, we ensure that all products meet strict quality standards and are delivered fresh to your door. Our commitment to excellence means you can trust every supplement you purchase.</p>",
+        "button_label": "Learn More",
+        "button_link": ""
+      }
     }
   },
   "order": [
@@ -469,6 +479,7 @@
     "weblegko_resources_AttJMD",
     "weblegko_newsletter_banner_QRJJRq",
     "weblegko_reviews_tXPqHm",
-    "weblegko_faq_GUCtKY"
+    "weblegko_faq_GUCtKY",
+    "weblegko_about_doctor_4w33Hd"
   ]
 }
