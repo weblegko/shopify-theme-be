@@ -417,6 +417,43 @@
         "rating_score": "4.8",
         "review_count": "2,847"
       }
+    },
+    "weblegko_faq_GUCtKY": {
+      "type": "weblegko-faq",
+      "blocks": {
+        "question_kihtjb": {
+          "type": "question",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We accept returns within 30 days of purchase. Items must be in their original condition.</p>"
+          }
+        },
+        "question_VFfnkH": {
+          "type": "question",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We accept returns within 30 days of purchase. Items must be in their original condition.</p>"
+          }
+        },
+        "question_pwdmaF": {
+          "type": "question",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We accept returns within 30 days of purchase. Items must be in their original condition.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_kihtjb",
+        "question_VFfnkH",
+        "question_pwdmaF"
+      ],
+      "name": "WEBLEGKO FAQ",
+      "settings": {
+        "heading": "FAQ",
+        "rating_score": "4.8",
+        "review_count": "2,847"
+      }
     }
   },
   "order": [
@@ -431,6 +468,7 @@
     "weblegko_secondary_slider_HkAqYJ",
     "weblegko_resources_AttJMD",
     "weblegko_newsletter_banner_QRJJRq",
-    "weblegko_reviews_tXPqHm"
+    "weblegko_reviews_tXPqHm",
+    "weblegko_faq_GUCtKY"
   ]
 }
