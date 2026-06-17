@@ -25,7 +25,10 @@
           {%- assign variant = product.selected_or_first_available_variant -%}
           {%- assign product_form_id = 'quick-add-' | append: section.id | append: '-' | append: product.id -%}
           {%- assign qty_rules = false -%}
-          {%- if variant.quantity_rule.min > 1 or variant.quantity_rule.max != null or variant.quantity_rule.increment > 1 -%}
+          {%- if variant.quantity_rule.min > 1
+            or variant.quantity_rule.max != null
+            or variant.quantity_rule.increment > 1
+          -%}
             {%- assign qty_rules = true -%}
           {%- endif -%}
 
@@ -62,7 +65,7 @@
             <!-- Информация -->
             <div class="tw:px-[1rem] tw:flex tw:flex-col tw:flex-1">
               <a href="{{ product.url }}">
-                <h3 class="tw:text-[1.8rem] tw:font-medium tw:tracking-[-0.01em] tw:text-grayscale-950 tw:hover:text-black tw:leading-[1.33]">
+                <h3 class="tw:text-[1.8rem] tw:font-medium tw:tracking-[-0.01em] tw:text-grayscale-950 tw:hover:text-black tw:leading-[1.33] tw:line-clamp-2 tw:whitespace-normal">
                   {{ product.title }}
                 </h3>
               </a>
@@ -77,7 +80,11 @@
               <div class="tw:flex tw:flex-nowrap tw:gap-[0.8rem] tw:mt-[0.8rem] tw:mb-[1.4rem]">
                 {%- if product.compare_at_price > product.price -%}
                   {%- assign discount = product.compare_at_price | minus: product.price -%}
-                  {%- assign discount_percentage = discount | times: 100.0 | divided_by: product.compare_at_price | round -%}
+                  {%- assign discount_percentage = discount
+                    | times: 100.0
+                    | divided_by: product.compare_at_price
+                    | round
+                  -%}
                   <span class="tw:text-[2.4rem] tw:font-medium tw:whitespace-nowrap tw:text-grayscale-950 tw:leading-[1.33] tw:tracking-[-0.01em]">
                     <span>From</span>
                     <span class="tw:text-additional-red">
@@ -91,8 +98,12 @@
                     {{ discount_percentage }}% off
                   </span>
                 {%- else -%}
-                  <span class="tw:text-[1.4rem] tw:font-bold tw:text-grayscale-950 tw:whitespace-nowrap">
-                    {{ product.price | money }}
+                  <span class="tw:text-[2.4rem] tw:font-medium tw:whitespace-nowrap tw:text-grayscale-950 tw:leading-[1.33] tw:tracking-[-0.01em]">
+                    <span>From</span>
+                    <span class="tw:text-additional-green">
+                      {{ product.price | money }}
+                    </span>
+                  </span>
                   </span>
                 {%- endif -%}
               </div>
@@ -151,7 +162,9 @@
                         name="id"
                         value="{{ variant.id }}"
                         class="product-variant-id"
-                        {% unless variant.available %}disabled{% endunless %}
+                        {% unless variant.available %}
+                          disabled
+                        {% endunless %}
                       >
                       <button
                         id="{{ product_form_id }}-submit"
@@ -170,7 +183,9 @@
                         aria-labelledby="{{ product_form_id }}-submit title-{{ section.id }}-{{ product.id }}"
                         aria-live="polite"
                         data-sold-out-message="true"
-                        {% unless variant.available %}disabled{% endunless %}
+                        {% unless variant.available %}
+                          disabled
+                        {% endunless %}
                       >
                         <span>
                           {%- if variant.available -%}

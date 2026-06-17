@@ -325,9 +325,6 @@
   .tw\:mt-1 {
     margin-top: var(--tw-spacing);
   }
-  .tw\:mt-2 {
-    margin-top: calc(var(--tw-spacing) * 2);
-  }
   .tw\:mt-10 {
     margin-top: calc(var(--tw-spacing) * 10);
   }
@@ -958,12 +955,6 @@
   .tw\:bg-grayscale-950 {
     background-color: #0b0c0e;
   }
-  .tw\:bg-green-600 {
-    background-color: var(--tw-color-green-600);
-  }
-  .tw\:bg-red-600 {
-    background-color: var(--tw-color-red-600);
-  }
   .tw\:bg-seriy {
     background-color: #F7F3EB;
   }
@@ -1009,9 +1000,6 @@
   .tw\:p-\[2rem\] {
     padding: 2rem;
   }
-  .tw\:px-3 {
-    padding-inline: calc(var(--tw-spacing) * 3);
-  }
   .tw\:px-4 {
     padding-inline: calc(var(--tw-spacing) * 4);
   }
@@ -1044,9 +1032,6 @@
   }
   .tw\:px-\[2rem\] {
     padding-inline: 2rem;
-  }
-  .tw\:py-1 {
-    padding-block: var(--tw-spacing);
   }
   .tw\:py-8 {
     padding-block: calc(var(--tw-spacing) * 8);
@@ -1133,10 +1118,6 @@
   .tw\:text-3xl {
     font-size: var(--tw-text-3xl);
     line-height: var(--tw-leading, var(--tw-text-3xl--line-height));
-  }
-  .tw\:text-xs {
-    font-size: var(--tw-text-xs);
-    line-height: var(--tw-leading, var(--tw-text-xs--line-height));
   }
   .tw\:text-\[1\.2rem\] {
     font-size: 1.2rem;
