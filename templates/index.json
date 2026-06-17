@@ -33,9 +33,50 @@
       ],
       "name": "WEBLEGKO PROMO SLIDER",
       "settings": {}
+    },
+    "weblegko_doctor_grid_W8WXMT": {
+      "type": "weblegko-doctor-grid",
+      "blocks": {
+        "slide_Xn36DJ": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Grain_Free_Crackers_29.04.26_3200x1295px.webp",
+            "link": ""
+          }
+        },
+        "slide_7fzVwL": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/drberg-cosmetic.webp",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_Xn36DJ",
+        "slide_7fzVwL"
+      ],
+      "name": "WEBLEGKO DOCTOR",
+      "settings": {
+        "doctor_image": "shopify://shop_images/drberg.webp",
+        "doctor_name": "Dr. Eric Berg",
+        "doctor_profession": "Health & Nutrition Expert",
+        "instagram_count": "2.7M followers",
+        "youtube_count": "14M subscribers",
+        "info_heading": "Natural Vitamins",
+        "info_heading_italic": "Supplements",
+        "info_rating_value": "4.8",
+        "info_reviews_value": "15,255",
+        "info_description": "Quality vitamins and supplements trusted by millions worldwide —  now delivered to your door across the UK.",
+        "button_blue_label": "Shop All Products",
+        "button_blue_link": "",
+        "button_grey_label": "Shop All Products",
+        "button_grey_link": ""
+      }
     }
   },
   "order": [
-    "weblegko_promo_slider_EQLPry"
+    "weblegko_promo_slider_EQLPry",
+    "weblegko_doctor_grid_W8WXMT"
   ]
 }
