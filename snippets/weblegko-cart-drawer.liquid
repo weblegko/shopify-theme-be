@@ -95,13 +95,15 @@
     </svg>
   </div>
 </div>
-
 <!-- snippets/weblegko-cart-drawer-script.liquid -->
 <script>
   // Создаём глобальный объект для функций корзины
   window.WeblegkoCart = window.WeblegkoCart || {};
 
   (function () {
+    // Флаг для предотвращения повторных запросов
+    let isAdding = false;
+
     // ----- Функция обновления счётчика -----
     WeblegkoCart.updateCartCounter = function () {
       fetch('/cart.js')
@@ -196,7 +198,6 @@
       drawer.classList.remove('tw:translate-x-full');
       drawer.classList.add('tw:translate-x-0');
 
-      // Блокируем скролл
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
@@ -216,7 +217,6 @@
       drawer.classList.add('tw:translate-x-full');
       drawer.classList.remove('tw:translate-x-0');
 
-      // Возвращаем скролл
       document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
       document.body.style.position = '';
@@ -226,37 +226,40 @@
     };
 
     // --- ЗАГЛУШКА ДЛЯ QUICK-ADD ---
-    // Создаём скрытый cart-notification, если его нет
     let notif = document.querySelector('cart-notification');
     if (!notif) {
       notif = document.createElement('cart-notification');
       notif.style.display = 'none';
       document.body.appendChild(notif);
     }
-    // Добавляем недостающий метод
     if (notif && typeof notif.setActiveElement !== 'function') {
-      notif.setActiveElement = function() {
-        // пустая функция-заглушка
-      };
+      notif.setActiveElement = function() {};
     }
-    // --- КОНЕЦ ЗАГЛУШКИ ---
 
-    // Отключаем скрипт на страницах /cart и /checkout
+    // --- Отключаем на /cart и /checkout ---
     const path = window.location.pathname;
     if (path === '/cart' || path === '/checkout' || path.startsWith('/checkout/')) {
       return;
     }
 
-    // ----- Инициализация при загрузке DOM -----
+    // ----- Инициализация -----
     document.addEventListener('DOMContentLoaded', function () {
-      // ---- Перехват всех форм добавления в корзину (capture phase) ----
+      // ---- Перехват форм (capture) ----
       document.addEventListener(
         'submit',
         function (event) {
           const form = event.target;
-          if (form && form.action && form.action.endsWith('/cart/add')) {
+          // Проверяем action формы (через getAttribute, чтобы получить оригинальный URL)
+          const action = form.getAttribute('action');
+          if (form && action && action.includes('/cart/add')) {
+            // Полностью блокируем все другие обработчики
             event.preventDefault();
             event.stopPropagation();
+            event.stopImmediatePropagation();
+
+            // Защита от повторных кликов
+            if (isAdding) return;
+            isAdding = true;
 
             const formData = new FormData(form);
             const variantId = formData.get('id');
@@ -264,6 +267,7 @@
 
             if (!variantId) {
               console.error('ID варианта не найден');
+              isAdding = false;
               return;
             }
 
@@ -290,13 +294,14 @@
               })
               .finally(() => {
                 WeblegkoCart.hideLoader();
+                isAdding = false;
               });
           }
         },
         true
       );
 
-      // ---- События для иконки корзины, крестика и оверлея ----
+      // ---- События для иконки, крестика, оверлея ----
       const cartIcon = document.querySelector('#weblegko-cart-icon-bubble');
       if (cartIcon) {
         cartIcon.addEventListener('click', function (event) {
