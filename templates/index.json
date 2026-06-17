@@ -115,12 +115,59 @@
         "description": "Premium supplements for your health",
         "collection": "b-vitamins"
       }
+    },
+    "weblegko_why_choose_us_xrdXrA": {
+      "type": "weblegko-why-choose-us",
+      "blocks": {
+        "card_gKGKtq": {
+          "type": "card",
+          "settings": {
+            "icon_image": "shopify://shop_images/leaf.webp",
+            "title": "Whole-food nutrition",
+            "text": "<p>We use only natural ingredients, free from synthetic isolates<br/>and artificial additives.</p>"
+          }
+        },
+        "card_YTVPE8": {
+          "type": "card",
+          "settings": {
+            "title": "Expert Team",
+            "text": "<p>Our professionals provide top-tier service and unparalleled industry experience.</p>"
+          }
+        },
+        "card_Lamzn8": {
+          "type": "card",
+          "settings": {
+            "title": "Expert Team",
+            "text": "<p>Our professionals provide top-tier service and unparalleled industry experience.</p>"
+          }
+        },
+        "card_p69b7M": {
+          "type": "card",
+          "settings": {
+            "title": "Expert Team",
+            "text": "<p>Our professionals provide top-tier service and unparalleled industry experience.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "card_gKGKtq",
+        "card_YTVPE8",
+        "card_Lamzn8",
+        "card_p69b7M"
+      ],
+      "name": "WEBLEGKO WHY US",
+      "settings": {
+        "heading": "Why Choose Us",
+        "description": "Discover what makes us different",
+        "bg_image": "shopify://shop_images/whychooseus-background.webp"
+      }
     }
   },
   "order": [
     "weblegko_promo_slider_EQLPry",
     "weblegko_doctor_grid_W8WXMT",
     "weblegko_features_aHX3JD",
-    "weblegko_premium_products_L3LbfF"
+    "weblegko_premium_products_L3LbfF",
+    "weblegko_why_choose_us_xrdXrA"
   ]
 }
