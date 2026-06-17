@@ -8,6 +8,34 @@
  * ------------------------------------------------------------
  */
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "weblegko_promo_slider_EQLPry": {
+      "type": "weblegko-promo-slider",
+      "blocks": {
+        "slide_4gXzjj": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Potassium_TriBlend_11.05.26_3200x1295px.webp",
+            "link": ""
+          }
+        },
+        "slide_cht7QY": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/drberg-cosmetic.webp",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_4gXzjj",
+        "slide_cht7QY"
+      ],
+      "name": "WEBLEGKO PROMO SLIDER",
+      "settings": {}
+    }
+  },
+  "order": [
+    "weblegko_promo_slider_EQLPry"
+  ]
 }
