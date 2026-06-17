@@ -95,20 +95,19 @@
     </svg>
   </div>
 </div>
+
+
 <!-- snippets/weblegko-cart-drawer-script.liquid -->
 <script>
-  // Создаём глобальный объект для функций корзины
   window.WeblegkoCart = window.WeblegkoCart || {};
 
   (function () {
-    // Флаг для предотвращения повторных запросов
     let isAdding = false;
 
-    // ----- Функция обновления счётчика -----
     WeblegkoCart.updateCartCounter = function () {
       fetch('/cart.js')
-        .then((res) => res.json())
-        .then((cart) => {
+        .then(res => res.json())
+        .then(cart => {
           const counter = document.querySelector('.cart-count-bubble');
           if (counter) {
             const count = cart.item_count;
@@ -116,14 +115,13 @@
             counter.style.display = count > 0 ? 'flex' : 'none';
           }
         })
-        .catch((err) => console.warn('Не удалось обновить счётчик:', err));
+        .catch(err => console.warn('Не удалось обновить счётчик:', err));
     };
 
-    // ----- Загрузка содержимого корзины в дровер -----
     WeblegkoCart.loadCartDrawerContent = function () {
       fetch('/cart.js')
-        .then((response) => response.json())
-        .then((cart) => {
+        .then(response => response.json())
+        .then(cart => {
           const container = document.querySelector('#cart-drawer-items');
           const totalEl = document.querySelector('#cart-drawer-total');
           const viewCartButton = document.getElementById('cart-drawer-view-cart');
@@ -141,7 +139,7 @@
             return;
           }
 
-          cart.items.forEach((item) => {
+          cart.items.forEach(item => {
             const itemDiv = document.createElement('div');
             itemDiv.className = 'tw:flex tw:items-start tw:gap-[1rem] tw:py-[1rem] tw:border-b tw:border-grayscale-100';
             const price = (item.price / 100).toFixed(2);
@@ -167,10 +165,9 @@
             viewCartButton.textContent = `View cart (${cart.item_count})`;
           }
         })
-        .catch((err) => console.warn('Ошибка загрузки корзины:', err));
+        .catch(err => console.warn('Ошибка загрузки корзины:', err));
     };
 
-    // ----- Лоадер -----
     WeblegkoCart.showLoader = function () {
       const loader = document.getElementById('global-loader');
       if (loader) {
@@ -187,7 +184,6 @@
       }
     };
 
-    // ----- Открытие / закрытие дровера -----
     WeblegkoCart.openCartDrawer = function () {
       const overlay = document.querySelector('#cart-drawer-overlay');
       const drawer = document.querySelector('#cart-drawer');
@@ -225,7 +221,7 @@
       window.scrollTo(0, parseInt(document.body.style.top || '0') * -1);
     };
 
-    // --- ЗАГЛУШКА ДЛЯ QUICK-ADD ---
+    // Заглушка для quick-add
     let notif = document.querySelector('cart-notification');
     if (!notif) {
       notif = document.createElement('cart-notification');
@@ -233,32 +229,34 @@
       document.body.appendChild(notif);
     }
     if (notif && typeof notif.setActiveElement !== 'function') {
-      notif.setActiveElement = function() {};
+      notif.setActiveElement = function () {};
     }
 
-    // --- Отключаем на /cart и /checkout ---
+    // Отключаем на /cart и /checkout
     const path = window.location.pathname;
     if (path === '/cart' || path === '/checkout' || path.startsWith('/checkout/')) {
       return;
     }
 
-    // ----- Инициализация -----
     document.addEventListener('DOMContentLoaded', function () {
-      // ---- Перехват форм (capture) ----
+      // ---- Перехват всех форм (capture) ----
       document.addEventListener(
         'submit',
         function (event) {
           const form = event.target;
-          // Проверяем action формы (через getAttribute, чтобы получить оригинальный URL)
           const action = form.getAttribute('action');
           if (form && action && action.includes('/cart/add')) {
-            // Полностью блокируем все другие обработчики
+            // Логируем перехват
+            console.log('🛒 Перехват формы:', form);
+
             event.preventDefault();
             event.stopPropagation();
             event.stopImmediatePropagation();
 
-            // Защита от повторных кликов
-            if (isAdding) return;
+            if (isAdding) {
+              console.warn('⏳ Уже идёт добавление, пропускаем');
+              return;
+            }
             isAdding = true;
 
             const formData = new FormData(form);
@@ -266,10 +264,12 @@
             const quantity = formData.get('quantity') || 1;
 
             if (!variantId) {
-              console.error('ID варианта не найден');
+              console.error('❌ ID варианта не найден');
               isAdding = false;
               return;
             }
+
+            console.log('📦 Отправка:', { variantId, quantity });
 
             WeblegkoCart.showLoader();
 
@@ -280,17 +280,22 @@
                 items: [{ id: parseInt(variantId), quantity: parseInt(quantity) }],
               }),
             })
-              .then((response) => {
-                if (!response.ok) throw new Error('Ошибка добавления');
+              .then(async (response) => {
+                if (!response.ok) {
+                  const text = await response.text();
+                  console.error('❌ Ошибка сервера (' + response.status + '):', text);
+                  throw new Error('Ошибка добавления: ' + text);
+                }
                 return response.json();
               })
               .then((cart) => {
+                console.log('✅ Товар добавлен, корзина:', cart);
                 WeblegkoCart.updateCartCounter();
                 WeblegkoCart.openCartDrawer();
               })
               .catch((error) => {
-                console.error('Ошибка:', error);
-                alert('Не удалось добавить товар. Попробуйте позже.');
+                console.error('❌ Ошибка:', error);
+                alert('Не удалось добавить товар. Подробности в консоли (F12).');
               })
               .finally(() => {
                 WeblegkoCart.hideLoader();
@@ -298,7 +303,7 @@
               });
           }
         },
-        true
+        true // capture phase
       );
 
       // ---- События для иконки, крестика, оверлея ----
