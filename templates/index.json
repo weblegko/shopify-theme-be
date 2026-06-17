@@ -164,6 +164,15 @@
         "description": "Discover what makes us different",
         "bg_image": "shopify://shop_images/whychooseus-background.webp"
       }
+    },
+    "weblegko_popular_products_JfXXxF": {
+      "type": "weblegko-popular-products",
+      "name": "WEBLEGKO POPULAR",
+      "settings": {
+        "heading": "Popular Products",
+        "description": "Premium supplements for your health",
+        "collection": "beauty"
+      }
     }
   },
   "order": [
@@ -171,6 +180,7 @@
     "weblegko_doctor_grid_W8WXMT",
     "weblegko_features_aHX3JD",
     "weblegko_premium_products_L3LbfF",
-    "weblegko_why_choose_us_xrdXrA"
+    "weblegko_why_choose_us_xrdXrA",
+    "weblegko_popular_products_JfXXxF"
   ]
 }
