@@ -1,0 +1,179 @@
+{% comment %} 
+<!-- sections/weblegko-popular-noajax-products.liquid -->
+
+<section class="tw:bg-seriy tw:text-grayscale-950 tw:px-[1.6rem]">
+  <div class="tw:max-w-[112rem] tw:mx-auto tw:py-[5rem] tw:lg:py-[12.8rem]">
+    <!-- Заголовок секции -->
+    {%- if section.settings.heading != blank -%}
+      <div class="tw:flex tw:flex-col tw:items-center tw:gap-[1rem] tw:mb-[3rem]">
+        <h2 class="tw:text-[2.4rem] tw:sm:text-[4rem] tw:font-medium tw:tracking-[-0.04em] tw:leading-[1.33] tw:lg:leading-[1.2] tw:text-center">
+          {{ section.settings.heading }}
+        </h2>
+
+        {%- if section.settings.description != blank -%}
+          <div class="tw:mx-auto tw:inline-flex tw:items-center tw:justify-center tw:gap-2 tw:py-[0.8rem] tw:px-[2rem] tw:bg-[#e5dccb] tw:rounded-full">
+            <span class="tw:pt-1 tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:text-center">
+              {{ section.settings.description }}
+            </span>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <!-- Сетка товаров (1 кол -> 2 кол -> 3 кол) -->
+    <div class="tw:grid tw:grid-cols-1 tw:sm:grid-cols-2 tw:lg:grid-cols-3 tw:gap-[2rem]">
+      {%- if section.settings.collection != blank -%}
+        <!-- Вывод реальных товаров (максимум 6) -->
+        {%- for product in section.settings.collection.products limit: 6 -%}
+          
+          <!-- Заменил <a> на <div>, классы те же, чтобы работала кнопка внутри -->
+          <div
+            class="tw:flex tw:flex-col tw:h-full tw:hover:scale-[101%] tw:hover:shadow-lg tw:transition-all tw:duration-300 tw:group tw:px-[0.8rem] tw:pt-[0.8rem] tw:pb-[1.6rem] tw:rounded-[1.6rem] tw:bg-white  tw:overflow-hidden"
+          >
+            <!-- Обертка картинки (сделал ссылкой) -->
+            <a href="{{ product.url }}" class="tw:block tw:aspect-square tw:overflow-hidden tw:rounded-[0.8rem] tw:mb-[1.6rem] tw:bg-[#f2f1ed]">
+              {%- if product.featured_image -%}
+                <img
+                  src="{{ product.featured_image | image_url: width: 600 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  class="tw:w-full tw:h-full tw:object-cover tw:transition-transform tw:duration-300 group-hover:tw:scale-105"
+                  loading="lazy"
+                  width="600"
+                  height="600"
+                >
+              {%- else -%}
+                <div class="tw:w-full tw:h-full tw:flex tw:items-center tw:justify-center">
+                  {{ 'product-1' | placeholder_svg_tag: 'tw:w-[6rem] tw:h-[6rem] tw:text-[#d4d4d4]' }}
+                </div>
+              {%- endif -%}
+            </a>
+
+            <!-- Информация о товаре -->
+            <div class="tw:px-[1rem] tw:flex tw:flex-col tw:flex-1">
+              
+              <!-- Заголовок (сделал ссылкой) -->
+              <a href="{{ product.url }}">
+                <h3 class="tw:text-[1.8rem] tw:font-medium tw:tracking-[-0.01em] tw:text-grayscale-950 tw:hover:text-black tw:leading-[1.33]">
+                  {{ product.title }}
+                </h3>
+              </a>
+
+              <!-- Описание (максимум 2 строки с троеточием) -->
+              {%- if product.description != blank -%}
+                <p class="tw:mt-[0.6rem] tw:text-[1.2rem] tw:tracking-[-0.01em] tw:text-grayscale-600 tw:leading-[1.33] tw:line-clamp-2 tw:whitespace-normal">
+                  {{ product.description | strip_html }}
+                </p>
+              {%- endif -%}
+
+              <!-- Ряд с ценами и скидкой (не прыгает, не переносится) -->
+              <div class="tw:flex tw:flex-nowrap tw:gap-[0.8rem] tw:mt-[0.8rem] tw:mb-[1.4rem]">
+                {%- if product.compare_at_price > product.price -%}
+                  {%- assign discount = product.compare_at_price | minus: product.price -%}
+                  {%- assign discount_percentage = discount
+                    | times: 100.0
+                    | divided_by: product.compare_at_price
+                    | round
+                  -%}
+
+                  <span class="tw:text-[2.4rem] tw:font-medium tw:whitespace-nowrap tw:text-grayscale-950 tw:leading-[1.33] tw:tracking-[-0.01em]">
+                    <span>From</span>
+                    <span class="tw:text-additional-red">
+                      {{ product.price | money }}
+                    </span>
+                  </span>
+                  <span class="tw:text-[1.4rem] tw:text-grayscale-400 tw:leading-[1.43] tw:tracking-[-0.01em] tw:line-through tw:whitespace-nowrap">
+                    {{ product.compare_at_price | money }}
+                  </span>
+
+                  <!-- Плашка со скидкой -->
+                  <span class="tw:mt-1 tw:shrink-0 tw:px-[0.8rem] tw:h-[2.8rem] tw:bg-golden tw:text-[1.4rem] tw:text-grayscale-950 tw:leading-[1] tw:flex tw:items-center tw:justify-center tw:uppercase tw:rounded-full">
+                    {{ discount_percentage }}% off
+                  </span>
+                {%- else -%}
+                  <span class="tw:text-[1.4rem] tw:font-bold tw:text-grayscale-950 tw:whitespace-nowrap">
+                    {{ product.price | money }}
+                  </span>
+                {%- endif -%}
+              </div>
+
+              <!-- Кнопка (Рабочий функционал добавления) -->
+              <div class="tw:mt-auto">
+                <form action="/cart/add" method="post">
+                  <!-- Скрытый input с ID варианта товара -->
+                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                  
+                  <!-- Заменил div на button, чтобы форма работала. Классы те же + tw:w-full tw:border-0 tw:cursor-pointer -->
+                  <button
+                    type="submit"
+                    class="
+                      tw:w-full tw:border-0 tw:cursor-pointer
+                      tw:bg-golden tw:hover:bg-goldendark tw:flex tw:items-center tw:justify-center tw:rounded-full tw:transition-colors tw:duration-300
+                      tw:pt-1 tw:px-[1.6rem] tw:h-[4rem] tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium
+                    "
+                  >
+                    Add To Cart
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+
+      {%- else -%}
+        <!-- Одинаковые плейсхолдеры, если коллекция не выбрана -->
+        {%- for i in (1..6) -%}
+          <div class="tw:block tw:px-[0.8rem] tw:pt-[0.8rem] tw:pb-[1.6rem] tw:rounded-[1.6rem] tw:bg-white">
+            <!-- Плейсхолдер картинки -->
+            <div class="tw:aspect-square tw:bg-[#f2f1ed] tw:rounded-[0.8rem] tw:flex tw:items-center tw:justify-center tw:mb-[1.6rem]">
+              {{ 'product-1' | placeholder_svg_tag: 'tw:w-[6rem] tw:h-[6rem] tw:text-[#d4d4d4]' }}
+            </div>
+            <div class="tw:px-[1rem]">
+              <!-- Плейсхолдер заголовка -->
+              <div class="tw:h-[1.6rem] tw:w-[70%] tw:bg-[#f2f1ed] tw:rounded-full tw:mb-[0.8rem]"></div>
+              <!-- Плейсхолдер описания -->
+              <div class="tw:h-[1.2rem] tw:w-[100%] tw:bg-[#f2f1ed] tw:rounded-full tw:mb-[0.4rem]"></div>
+              <div class="tw:h-[1.2rem] tw:w-[60%] tw:bg-[#f2f1ed] tw:rounded-full tw:mb-[1.2rem]"></div>
+              <!-- Плейсхолдер цены -->
+              <div class="tw:h-[1.4rem] tw:w-[40%] tw:bg-[#f2f1ed] tw:rounded-full"></div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "WEBLEGKO POPULAR",
+  "tag": "section",
+  "class": "section-popular-products",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Popular Products",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "default": "Bestsellers",
+      "label": "Description Badge"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "WEBLEGKO POPULAR"
+    }
+  ]
+}
+{% endschema %} {% endcomment %}

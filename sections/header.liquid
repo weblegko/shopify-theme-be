@@ -1,0 +1,365 @@
+<!-- sections/custom-header.liquid -->
+
+{%- style -%}
+  :root {
+    /* 5.6rem * 10px = 56px на мобилке */
+    --header-height: 5.6rem;
+  }
+{%- endstyle -%}
+
+<header
+  class="tw:w-full tw:text-grayscale-950 tw:transition-shadow tw:duration-300"
+  id="site-header"
+>
+  <div class="tw:max-w-[144rem] tw:mx-auto tw:px-[2.3rem] tw:flex tw:items-center tw:justify-between tw:h-[var(--header-height)]">
+    <!-- ========================================== -->
+    <!-- ЛЕВАЯ ЧАСТЬ: Лого + Десктопное меню -->
+    <!-- ========================================== -->
+    <div class="tw:flex tw:items-center tw:gap-10 shrink-0">
+      <!-- ЛОГОТИП -->
+      <a href="{{ routes.root_url }}" class="tw:flex tw:items-center tw:gap-2 tw:aspect-[142/40] tw:h-[4rem]">
+        {%- if settings.logo != blank -%}
+          {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+          {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+          {{
+            settings.logo
+            | image_url: width: 300
+            | image_tag:
+              class: 'h-[inherit] tw:w-auto object-cover',
+              heights: '40, 50',
+              width: settings.logo_width,
+              alt: logo_alt
+          }}
+        {%- else -%}
+          <span class="tw:text-3xl tw:md:text-4xl tw:font-bold tw:tracking-tight">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+
+      <!-- ДЕСКТОПНОЕ МЕНЮ -->
+      {%- if section.settings.menu != blank -%}
+        <nav class="tw:hidden tw:xl:flex tw:items-center tw:gap-9">
+          {%- for link in section.settings.menu.links -%}
+            <a
+              href="{{ link.url }}"
+              class="
+                tw:text-[1.4rem] tw:tracking-[-0.04em] tw:leading-[1.43] tw:text-center tw:text-grayscale-950 tw:hover:opacity-80 tw:transition-opacity
+                {% if link.active %}tw:opacity-100 tw:underline{% endif %}
+              "
+            >
+              {{ link.title }}
+            </a>
+          {%- endfor -%}
+        </nav>
+      {%- endif -%}
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ПРАВАЯ ЧАСТЬ: Соцсети + Иконки + Бургер -->
+    <!-- ========================================== -->
+    <div class="tw:flex tw:items-center tw:gap-10 tw:xl:gap-8">
+      <!-- СОЦИАЛЬНЫЕ СЕТИ (Только десктоп) -->
+      <div class="tw:hidden tw:xl:flex tw:items-center tw:gap-8 tw:pr-8">
+        {%- if settings.social_instagram_link != blank -%}
+          <a
+            href="{{ settings.social_instagram_link }}"
+            class="tw:opacity-85 tw:hover:opacity-100 tw:transition-opacity"
+            target="_blank"
+            rel="noopener"
+            aria-label="Instagram"
+          >
+            <!-- Иконка Instagram -->
+            <div class="tw:w-[2.4rem] tw:h-[2.4rem] tw:xl:w-[2rem] tw:xl:h-[2rem]">
+              <img
+                src="{{ 'instagram.webp' | asset_url }}"
+                alt="Instagram"
+                class="tw:w-full tw:h-full tw:object-cover"
+                loading="lazy"
+                width="60"
+                height="60"
+              >
+            </div>
+          </a>
+        {%- endif -%}
+        <a
+          href="https://telegram.org"
+          class="tw:opacity-85 tw:hover:opacity-100 tw:transition-opacity"
+          target="_blank"
+          rel="noopener"
+          aria-label="Telegram"
+        >
+          <svg class="tw:w-[2.4rem] tw:h-[2.4rem] tw:xl:w-[2rem] tw:xl:h-[2rem]" focusable="false" aria-hidden="true">
+            <use href="#telegram"></use>
+          </svg>
+        </a>
+        {%- if settings.social_facebook_link != blank -%}
+          <a
+            href="{{ settings.social_facebook_link }}"
+            class="tw:opacity-85 tw:hover:opacity-100 tw:transition-opacity"
+            target="_blank"
+            rel="noopener"
+            aria-label="Facebook"
+          >
+            <svg class="tw:w-[2.4rem] tw:h-[2.4rem] tw:xl:w-[2rem] tw:xl:h-[2rem]" focusable="false" aria-hidden="true">
+              <use href="#facebook"></use>
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+
+      <!-- ИКОНКИ ДЕЙСТВИЙ -->
+      <div class="tw:flex tw:items-center tw:gap-10 tw:xl:gap-8">
+        <!-- ПОИСК (Только десктоп) -->
+        <button
+          type="button"
+          id="search-toggle-btn"
+          class="tw:shrink-0 tw:hidden tw:xl:block tw:opacity-80 tw:hover:opacity-100 tw:transition-opacity"
+          aria-label="Поиск"
+        >
+          <svg class="tw:w-[2.4rem] tw:h-[2.4rem] tw:xl:w-[2rem] tw:xl:h-[2rem]" focusable="false" aria-hidden="true">
+            <use href="#search"></use>
+          </svg>
+        </button>
+
+        <!-- АККАУНТ -->
+        {%- if shop.customer_accounts_enabled -%}
+          <a
+            href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+            class="tw:shrink-0 tw:text-grayscale-950 tw:opacity-80 tw:hover:opacity-100 tw:transition-opacity"
+            aria-label="Аккаунт"
+          >
+            <svg
+              class="tw:shrink-0 tw:w-[2.4rem] tw:h-[2.4rem] tw:xl:w-[2rem] tw:xl:h-[2rem]"
+              focusable="false"
+              aria-hidden="true"
+            >
+              <use href="#profile"></use>
+            </svg>
+          </a>
+        {%- endif -%}
+
+        <!-- КОРЗИНА -->
+        <a
+          href="{{ routes.cart_url }}"
+          class="tw:shrink-0 tw:relative tw:inline-flex tw:items-center tw:justify-center tw:opacity-80 hover:tw:opacity-100 tw:transition-opacity"
+          id="weblegko-cart-icon-bubble"
+          style="width: 2.4rem; height: 2.4rem;"
+        >
+          <svg
+            class="tw:shrink-0 tw:w-[2.4rem] tw:h-[2.4rem] tw:xl:w-[2rem] tw:xl:h-[2rem]"
+            focusable="false"
+            aria-hidden="true"
+          >
+            <use href="#cart"></use>
+          </svg>
+          {%- if cart.item_count > 0 -%}
+            <div class="cart-count-bubble tw:!bg-goluboy tw:absolute tw:-top-[0.4rem] tw:!left-[1.5rem] tw:flex tw:items-center tw:justify-center tw:min-w-[2rem] tw:h-[2rem] tw:rounded-full tw:bg-goluboy tw:text-white tw:text-[1.2rem] tw:font-bold tw:leading-none tw:px-[0.4rem] tw:border-2 tw:border-white tw:shadow-sm">
+              <span aria-hidden="true">{{ cart.item_count }}</span>
+            </div>
+          {%- endif -%}
+        </a>
+      </div>
+
+      <!-- БУРГЕР (Только мобилка) -->
+      {%- if section.settings.menu != blank -%}
+        <button
+          type="button"
+          id="burger-toggle-btn"
+          class="tw:shrink-0 tw:xl:hidden tw:opacity-80 tw:hover:opacity-100 tw:transition-opacity"
+          aria-label="Открыть меню"
+        >
+          <svg
+            class="tw:shrink-0 tw:w-[2.4rem] tw:h-[2.4rem] tw:xl:w-[2rem] tw:xl:h-[2rem]"
+            focusable="false"
+            aria-hidden="true"
+          >
+            <use href="#burger"></use>
+          </svg>
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- ДЕСКТОПНЫЙ ПОИСК (Плавное появление поверх контента) -->
+  <!-- ========================================== -->
+  <div
+    id="desktop-search-bar"
+    class="tw:absolute tw:left-0 tw:right-0 tw:top-full tw:z-40 tw:bg-white tw:shadow-lg tw:border-t tw:border-gray-100 tw:opacity-0 tw:invisible tw:-translate-y-2 tw:transition-all tw:duration-300"
+  >
+    <div class="tw:max-w-[144rem] tw:mx-auto tw:px-[1.6rem] tw:py-8">
+      <!-- Подключаем сниппет. Кнопка не нужна, ищет по Enter -->
+      {% render 'weblegko-search-form', input_id: 'Search-Desktop', wrapper_class: 'tw:max-w-5xl tw:mx-auto' %}
+    </div>
+  </div>
+</header>
+
+<!-- ========================================== -->
+<!-- МОБИЛЬНЫЙ CANVAS -->
+<!-- ========================================== -->
+<div
+  id="mobile-overlay"
+  class="tw:fixed tw:inset-0 tw:bg-black/50 tw:z-[60] tw:hidden tw:transition-opacity tw:duration-300"
+></div>
+
+<div
+  id="mobile-drawer"
+  class="tw:border tw:border-black/10 tw:fixed tw:top-0 tw:right-0 tw:h-full tw:w-[85%] tw:max-w-[40rem] tw:bg-white tw:text-grayscale-950 tw:z-[70] tw:flex tw:flex-col tw:transform tw:translate-x-full tw:transition-transform tw:duration-300"
+>
+  <!-- Шапка канваса -->
+  <div class="tw:flex tw:justify-between tw:items-center tw:p-6 tw:border-b tw:border-gray-200">
+    <span class="tw:font-poppins tw:text-[1.4rem] tw:uppercase">Menu</span>
+    <button type="button" id="drawer-close-btn" class="tw:opacity-60 tw:hover:opacity-100" aria-label="Закрыть меню">
+      <svg class="tw:w-[2.4rem] tw:h-[2.4rem]" focusable="false" aria-hidden="true">
+        <use href="#close"></use>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ПОИСК В КАНВАСЕ -->
+  <div class="tw:p-6 tw:border-b tw:border-gray-200">
+    <!-- Подключаем сниппет. На мобилке показываем кнопку "Найти" -->
+    {% render 'weblegko-search-form', input_id: 'Search-Mobile', show_button: true %}
+  </div>
+
+  <!-- НАВИГАЦИЯ В КАНВАСЕ -->
+  <nav class="tw:flex-1 tw:overflow-y-auto tw:p-6">
+    {%- if section.settings.menu != blank -%}
+      <ul class="tw:flex tw:flex-col tw:gap-6">
+        {%- for link in section.settings.menu.links -%}
+          <li>
+            <a
+              href="{{ link.url }}"
+              class="tw:text-[1.6rem] tw:font-medium tw:hover:text-gray-600 tw:transition-colors {% if link.active %}tw:underline{% endif %}"
+            >
+              {{ link.title }}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </nav>
+
+  <!-- СОЦСЕТИ В КАНВАСЕ -->
+  <div class="tw:p-6 tw:border-t tw:border-gray-200 tw:flex tw:items-center tw:gap-6">
+    {%- if settings.social_instagram_link != blank -%}
+      <a
+        href="{{ settings.social_instagram_link }}"
+        class="tw:opacity-70 tw:hover:opacity-100 tw:transition-opacity"
+        target="_blank"
+        rel="noopener"
+        aria-label="Instagram"
+      >
+        <svg class="tw:w-[2.4rem] tw:h-[2.4rem]" focusable="false" aria-hidden="true">
+          <use href="#instagram"></use>
+        </svg>
+      </a>
+    {%- endif -%}
+    <a
+      href="https://telegram.org"
+      class="tw:opacity-70 tw:hover:opacity-100 tw:transition-opacity"
+      target="_blank"
+      rel="noopener"
+      aria-label="Telegram"
+    >
+      <svg class="tw:w-[2.4rem] tw:h-[2.4rem]" focusable="false" aria-hidden="true">
+        <use href="#telegram"></use>
+      </svg>
+    </a>
+    {%- if settings.social_facebook_link != blank -%}
+      <a
+        href="{{ settings.social_facebook_link }}"
+        class="tw:opacity-70 tw:hover:opacity-100 tw:transition-opacity"
+        target="_blank"
+        rel="noopener"
+        aria-label="Facebook"
+      >
+        <svg class="tw:w-[2.4rem] tw:h-[2.4rem]" focusable="false" aria-hidden="true">
+          <use href="#facebook"></use>
+        </svg>
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% render 'weblegko-cart-drawer' %}
+
+
+<!-- ========================================== -->
+<!-- СКРИПТЫ -->
+<!-- ========================================== -->
+<script>
+  // 1. Тень хедера при скролле
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('tw:shadow-md', window.scrollY > 10);
+  });
+
+  // 2. Десктопный поиск (Плавное появление)
+  const searchBtn = document.getElementById('search-toggle-btn');
+  const searchBar = document.getElementById('desktop-search-bar');
+
+  if (searchBtn && searchBar) {
+    searchBtn.addEventListener('click', () => {
+      const isHidden = searchBar.classList.contains('tw:invisible');
+
+      if (isHidden) {
+        // Открываем
+        searchBar.classList.remove('tw:opacity-0', 'tw:invisible', 'tw:-translate-y-2');
+        searchBar.classList.add('tw:opacity-100', 'tw:visible', 'tw:translate-y-0');
+        searchBar.querySelector('input[type="search"]').focus();
+      } else {
+        // Закрываем
+        searchBar.classList.add('tw:opacity-0', 'tw:invisible', 'tw:-translate-y-2');
+        searchBar.classList.remove('tw:opacity-100', 'tw:visible', 'tw:translate-y-0');
+      }
+    });
+
+    // Закрываем поиск при клике вне его области
+    document.addEventListener('click', (e) => {
+      if (!searchBar.contains(e.target) && !searchBtn.contains(e.target)) {
+        searchBar.classList.add('tw:opacity-0', 'tw:invisible', 'tw:-translate-y-2');
+        searchBar.classList.remove('tw:opacity-100', 'tw:visible', 'tw:translate-y-0');
+      }
+    });
+  }
+
+  // 3. Мобильный Canvas
+  const burgerBtn = document.getElementById('burger-toggle-btn');
+  const closeBtn = document.getElementById('drawer-close-btn');
+  const overlay = document.getElementById('mobile-overlay');
+  const drawer = document.getElementById('mobile-drawer');
+
+  function openDrawer() {
+    drawer.classList.replace('tw:translate-x-full', 'tw:translate-x-0');
+    overlay.classList.remove('tw:hidden');
+    document.body.classList.add('tw:overflow-hidden');
+    setTimeout(() => {
+      drawer.querySelector('input[type="search"]')?.focus();
+    }, 300);
+  }
+
+  function closeDrawer() {
+    drawer.classList.replace('tw:translate-x-0', 'tw:translate-x-full');
+    overlay.classList.add('tw:hidden');
+    document.body.classList.remove('tw:overflow-hidden');
+  }
+
+  if (burgerBtn) burgerBtn.addEventListener('click', openDrawer);
+  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+  if (overlay) overlay.addEventListener('click', closeDrawer);
+</script>
+
+{% schema %}
+{
+  "name": "BERGNZ Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Меню навигации"
+    }
+  ]
+}
+{% endschema %}

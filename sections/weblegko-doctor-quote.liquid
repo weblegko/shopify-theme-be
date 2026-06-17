@@ -1,0 +1,89 @@
+<!-- sections/weblegko-doctor-quote.liquid -->
+
+<!-- Скрываем на мобилке (tw:hidden), показываем от md (768px) -->
+<section class="tw:hidden tw:md:flex tw:bg-grayscale-50 tw:text-grayscale-950">
+  <div class="tw:max-w-[112rem] tw:px-[1.6rem]  tw:mx-auto tw:w-full tw:flex tw:items-stretch tw:gap-[5rem] tw:lg:gap-[7rem] tw:py-[8rem] tw:lg:py-[12rem]">
+    <!-- ЛЕВАЯ КОЛОНКА : Картинка доктора -->
+    <div class="tw:w-[53%] tw:flex tw:items-center tw:justify-center">
+      {% if section.settings.doctor_image != blank %}
+        {%- assign img_width = 800 -%}
+        {%- assign img_height = img_width | divided_by: section.settings.doctor_image.aspect_ratio -%}
+        <img
+          src="{{ section.settings.doctor_image | image_url: width: 800 }}"
+          alt="{{ section.settings.doctor_name | default: 'Doctor' | escape }}"
+          width="{{ img_width }}"
+          height="{{ img_height }}"
+          class="tw:w-full tw:max-w-[55rem] tw:h-auto tw:object-contain"
+          loading="lazy"
+        >
+      {% else %}
+        {{ 'image' | placeholder_svg_tag: 'tw:w-full tw:max-w-[55rem] tw:opacity-50' }}
+      {% endif %}
+    </div>
+
+    <!-- ПРАВАЯ КОЛОНКА : Контент -->
+    <div class="tw:w-[47%] tw:flex tw:flex-col tw:justify-center">
+      <!-- Ряд 1: Желтая иконка апострофа -->
+      <div class="tw:mb-[2rem]">
+        <svg class="tw:w-[5.5rem] tw:h-[4.7rem] tw:text-golden" focusable="false" aria-hidden="true">
+          <use href="#quote"></use>
+        </svg>
+      </div>
+
+      <!-- Ряд 2: Текст цитаты -->
+      <div class="tw:flex tw:flex-col tw:gap-[1rem] tw:text-[2rem] tw:text-grayscale-700 tw:leading-[1.4] tw:tracking-[-0.04em] tw:font-medium">
+        {{ section.settings.quote_text }}
+      </div>
+
+      <!-- Ряд 3: Кнопка Learn More -->
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <div class="tw:-mt-[1rem] tw:mb-[1rem]">
+          <a
+            href="{{ section.settings.button_link }}"
+            class="tw:inline-flex tw:items-center tw:justify-center tw:rounded-full tw:transition-colors tw:duration-300 tw:ease-in-out 
+            tw:hover:bg-golden tw:px-[1.6rem] tw:pt-1 tw:h-[3.6rem] tw:bg-white tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium tw:shadow-md"
+          >
+            {{ section.settings.button_label }}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "WEBLEGKO DOCTOR QUOTE",
+  "tag": "section",
+  "class": "section-doctor-quote",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "doctor_image",
+      "label": "Doctor Image"
+    },
+    {
+      "type": "richtext",
+      "id": "quote_text",
+      "default": "<p>Our bodies are capable of incredible healing when given the right nutrients and care. I've dedicated my life to helping people unlock their health potential naturally, without relying on quick fixes.</p>",
+      "label": "Quote Text"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Learn More",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "WEBLEGKO DOCTOR QUOTE"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,73 @@
+<!-- sections/about-doctor.liquid -->
+
+<section class="tw:bg-seriy tw:text-grayscale-950 tw:px-[1.6rem]">
+  <div class="tw:max-w-[112rem] tw:mx-auto tw:py-[5rem] tw:lg:py-[6.4rem]">
+    <!-- Заголовок -->
+    {%- if section.settings.heading != blank -%}
+      <h2 class="tw:font-inter tw:text-[1.8rem] tw:text-[#0a0a0a] tw:font-medium tw:leading-[1.56] tw:mb-[1rem]">
+        {{ section.settings.heading }}
+      </h2>
+    {%- endif -%}
+
+    <!-- Текст-анонс -->
+    {%- if section.settings.text != blank -%}
+      <div class="tw:text-[1.6rem] tw:text-[#8b867a] tw:leading-[1.5] tw:tracking-[-0.04em] tw:flex tw:flex-col tw:gap-[1rem]">
+        {{ section.settings.text }}
+      </div>
+    {%- endif -%}
+
+       <!-- Кнопка "Show More" -->
+    {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+      <div class="tw:flex tw:justify-between">
+        <a
+          href="{{ section.settings.button_link }}"
+          class="tw:shadow-md tw:pt-1
+            tw:mx-auto tw:inline-flex tw:items-center tw:justify-center tw:rounded-full 
+            tw:transition-colors tw:duration-300 tw:ease-in-out tw:hover:bg-golden 
+            tw:px-[1.6rem] tw:h-[3.6rem] tw:bg-white tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium
+          "
+        >
+          {{ section.settings.button_label }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "WEBLEGKO ABOUT DOCTOR",
+  "tag": "section",
+  "class": "section-about-doctor",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Meet Our Specialist",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "default": "<p>With over 10 years of experience in aesthetic medicine, Dr. Smith combines advanced techniques with a personalized approach to help you achieve your natural beauty goals. Click below to learn more about the doctor's qualifications, philosophy, and experience.</p>",
+      "label": "Short description"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Learn More",
+      "label": "Button label"
+    },
+    {
+      "type": "page",
+      "id": "button_link",
+      "label": "Page to link to"
+    }
+  ],
+  "presets": [
+    {
+      "name": "WEBLEGKO ABOUT DOCTOR"
+    }
+  ]
+}
+{% endschema %}
