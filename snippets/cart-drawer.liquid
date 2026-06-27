@@ -42,7 +42,7 @@
                   {{- 'icon-close.svg' | inline_asset_content -}}
                 </span>
               </button>
-              <a href="{{ routes.all_products_collection_url }}" class="button">
+              <a href="{{ routes.all_products_collection_url }}" class="button button--goluboy">
                 {{ 'general.continue_shopping' | t }}
               </a>
 
@@ -62,7 +62,10 @@
         </div>
       {%- endif -%}
       <div class="drawer__header">
-        <h2 class="drawer__heading">{{ 'sections.cart.title' | t }}</h2>
+        <h2 class="drawer__heading">
+          Shopping cart
+          {% comment %} {{ 'sections.cart.title' | t }} {% endcomment %}
+        </h2>
         <button
           class="drawer__close"
           type="button"
@@ -135,7 +138,7 @@
                             {% comment %} Leave empty space due to a:empty CSS display: none rule {% endcomment %}
                             <a href="{{ item.url }}" class="cart-item__link" tabindex="-1" aria-hidden="true"> </a>
                             <img
-                              class="cart-item__image"
+                              class="tw:border tw:border-golden/50 tw:rounded-[0.8rem] cart-item__image"
                               src="{{ item.image | image_url: width: 300 }}"
                               alt="{{ item.image.alt | escape }}"
                               loading="lazy"
@@ -258,7 +261,10 @@
                             {%- endif -%}
 
                             {%- if item.variant.available and item.unit_price_measurement -%}
-                              {% render 'unit-price', price: item.unit_price, measurement: item.unit_price_measurement %}
+                              {% render 'unit-price',
+                                price: item.unit_price,
+                                measurement: item.unit_price_measurement
+                              %}
                             {%- endif -%}
                           </div>
                         </td>
@@ -560,12 +566,17 @@
         </div>
 
         <!-- CTAs -->
+        <div class="tw:flex tw:flex-col tw:gap-4 tw:w-full cart__ctas" {{ block.shopify_attributes }}>
+          {%- if cart != empty -%}
+            <a href="{{ routes.cart_url }}" class="button button--golden">
+              {{ 'sections.cart.title' | t }}
+            </a>
+          {%- endif -%}
 
-        <div class="cart__ctas" {{ block.shopify_attributes }}>
           <button
             type="submit"
             id="CartDrawer-Checkout"
-            class="cart__checkout-button button"
+            class="tw:!mt-0 cart__checkout-button button button--goluboy"
             name="checkout"
             form="CartDrawer-Form"
             {% if cart == empty %}

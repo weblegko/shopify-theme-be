@@ -6,15 +6,14 @@
 -%}
 
 <!-- Скрыто на мобилке (tw:hidden), видно от md (768px) -->
-<section class="tw:hidden tw:md:block tw:relative tw:overflow-hidden tw:text-white">
-  
+<section class="tw:hidden tw:md:block tw:relative tw:overflow-hidden tw:text-white tw:md:mb-[6rem]">
   <!-- Фоновое изображение -->
   {% if bg_image != blank %}
     {%- assign img_width = 1920 -%}
     {%- assign img_height = img_width | divided_by: bg_image.aspect_ratio -%}
-    <img 
+    <img
       src="{{ poster_url }}"
-      alt="" 
+      alt=""
       width="{{ img_width }}"
       height="{{ img_height }}"
       class="tw:absolute tw:inset-0 tw:w-full tw:h-full tw:object-cover tw:z-0"
@@ -28,12 +27,11 @@
   <div class="tw:absolute tw:inset-0 tw:bg-black/50 tw:z-[1]"></div>
 
   <!-- Контент -->
-  <div class="tw:relative tw:z-0 tw:max-w-[112rem] tw:mx-auto tw:px-[1.6rem] tw:py-[5rem] tw:lg:pt-[13rem] tw:lg:pb-[12rem]">
-    
+  <div class="tw:relative tw:z-0 tw:max-w-[112rem] tw:mx-auto tw:px-[1.6rem] tw:xl:px-0 tw:py-[5rem] tw:md:pt-[12rem] tw:md:pb-[14rem]">
     <!-- Заголовок секции -->
     {%- if section.settings.heading != blank -%}
-      <div class="tw:flex tw:flex-col tw:items-center tw:gap-[1rem] tw:mb-[3rem]">
-        <h2 class="tw:text-[2.4rem] tw:lg:text-[4rem] tw:font-medium tw:tracking-[-0.04em] tw:leading-[1.33] tw:lg:leading-[1.2] tw:text-center">
+      <div class="tw:flex tw:flex-col tw:items-center tw:gap-[1rem] tw:mb-[3rem] tw:md:mb-[3.5rem]">
+        <h2 class="tw:text-[2.4rem] tw:md:text-[4rem] tw:font-medium tw:tracking-[-0.04em] tw:leading-[1.33] tw:lg:leading-[1.2] tw:text-center">
           {{ section.settings.heading }}
         </h2>
 
@@ -50,15 +48,21 @@
     <!-- Сетка карточек (2 колонки) -->
     <div class="tw:grid tw:grid-cols-2 tw:gap-[1rem]">
       {%- for block in section.blocks -%}
-        <div {{ block.shopify_attributes }}>
+        <div
+          class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          {% if settings.animations_reveal_on_scroll %}
+            data-cascade
+            style="--animation-order: {{ forloop.index }};"
+          {% endif %}
+          {{ block.shopify_attributes }}
+        >
           <!-- КАРТОЧКА (Эффект стекла) -->
           <div class="tw:flex tw:flex-col tw:items-center tw:text-center tw:p-[2rem] tw:rounded-[1.2rem] tw:bg-white/8 tw:backdrop-blur-md tw:border tw:border-white/20 tw:transition-all tw:duration-300 tw:hover:bg-white/20 tw:h-full">
-            
             <!-- Иконка -->
             {%- if block.settings.icon_image != blank -%}
               <div class="tw:w-[6rem] tw:h-[6rem] tw:flex tw:items-center tw:justify-center tw:mb-[2rem] tw:drop-shadow-lg">
-                <img 
-                  src="{{ block.settings.icon_image | image_url: width: 100 }}" 
+                <img
+                  src="{{ block.settings.icon_image | image_url: width: 100 }}"
                   alt="{{ block.settings.title | escape }}"
                   width="180"
                   height="180"
@@ -68,7 +72,14 @@
               </div>
             {%- else -%}
               <div class="tw:w-[5rem] tw:h-[5rem] tw:flex tw:items-center tw:justify-center tw:mb-[2rem] tw:bg-white/20 tw:rounded-full">
-                <svg class="tw:w-[2.4rem] tw:h-[2.4rem] tw:opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path></svg>
+                <svg
+                  class="tw:w-[2.4rem] tw:h-[2.4rem] tw:opacity-70"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path>
+                </svg>
               </div>
             {%- endif -%}
 
@@ -85,12 +96,10 @@
                 {{ block.settings.text }}
               </div>
             {%- endif -%}
-
           </div>
         </div>
       {%- endfor -%}
     </div>
-
   </div>
 </section>
 
@@ -109,7 +118,7 @@
     {
       "type": "textarea",
       "id": "description",
-      "default": "Discover what makes us different",
+      "default": "Science-backed nutrition solutions",
       "label": "Description Badge"
     },
     {
@@ -148,10 +157,34 @@
     {
       "name": "WEBLEGKO WHY US",
       "blocks": [
-        { "type": "card" },
-        { "type": "card" },
-        { "type": "card" },
-        { "type": "card" }
+        {
+          "type": "card",
+          "settings": {
+            "title": "Whole-food nutrition",
+            "text": "<p>We use only natural ingredients, free from synthetic isolates and artificial additives.</p>"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "GMP-certified quality",
+            "text": "<p> Every batch is manufactured to pharmaceutical-grade standards, ensuring maximum safety and purity</p>"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Premium ingredients",
+            "text": "<p>Our ingredients are sourced from reliable global partners who share our commitment to quality</p>"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Maximum bioavailability",
+            "text": "<p>Each formula is meticulously crafted to enhance absorption and deliver optimal results</p>"
+          }
+        }
       ]
     }
   ]

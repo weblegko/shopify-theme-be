@@ -113,7 +113,13 @@
       "settings": {
         "heading": "Premium Products",
         "description": "Premium supplements for your health",
-        "collection": "premium-3"
+        "collection": "premium-3",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard"
       }
     },
     "weblegko_why_choose_us_eNEVrD": {
@@ -171,7 +177,13 @@
       "settings": {
         "heading": "Popular Products",
         "description": "Premium supplements for your health",
-        "collection": "popullar-6"
+        "collection": "popullar-6",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard"
       }
     },
     "weblegko_video_Ti4BRk": {
@@ -190,7 +202,7 @@
       "name": "WEBLEGKO DOCTOR QUOTE",
       "settings": {
         "doctor_image": "shopify://shop_images/drberg-quote.webp",
-        "quote_text": "<p>Dr. Eric Berg is a renowned expert in healthy ketosis and intermittent fasting. With over 15 million subscribers worldwide, Dr. Berg has dedicated his career to helping people achieve optimal health through natural nutrition.</p><p>All supplements are scientifically formulated with the highest quality natural ingredients, ensuring maximum effectiveness and safety.<br/><br/></p>",
+        "quote_text": "<p>Dr. Eric Berg is a renowned expert in healthy ketosis and intermittent fasting. With over 15 million subscribers worldwide, Dr. Berg has dedicated his career to helping people achieve optimal health through natural nutrition.</p><p>All supplements are scientifically formulated with the highest quality natural ingredients, ensuring maximum effectiveness and safety.</p>",
         "button_label": "Learn More",
         "button_link": "https://example.com"
       }
@@ -294,8 +306,7 @@
         "avatar": "shopify://shop_images/drberg-avatar_22246983-f596-41ab-9ffb-dbfd3cb27edd.webp",
         "doctor_name": "Dr. Eric Berg",
         "doctor_role": "Health Specialist",
-        "text": "Get the latest health tips, exclusive offers, and expert advice delivered straight to your inbox. Join our community today and take the first step towards a healthier you.",
-        "privacy_link": ""
+        "text": "Get the latest health tips, exclusive offers, and expert advice delivered straight to your inbox. Join our community today and take the first step towards a healthier you."
       }
     },
     "weblegko_reviews_MRPRFq": {
@@ -493,7 +504,7 @@
       "name": "WEBLEGKO ABOUT DOCTOR",
       "settings": {
         "heading": "More About Dr. Berg Supplements",
-        "text": "<p>Dr. Berg's supplements are formulated with the highest quality natural ingredients to support your health and wellness journey. Each product is carefully crafted based on years of research and clinical experience.</p><p>As the official UK distributor, we ensure that all products meet strict quality standards and are delivered fresh to your door. Our commitment to excellence means you can trust every supplement you purchase.<br/><br/></p>",
+        "text": "<p>Dr. Berg's supplements are formulated with the highest quality natural ingredients to support your health and wellness journey. Each product is carefully crafted based on years of research and clinical experience.</p><p>As the official UK distributor, we ensure that all products meet strict quality standards and are delivered fresh to your door. Our commitment to excellence means you can trust every supplement you purchase.</p>",
         "button_label": "Show More",
         "button_link": "contact"
       }

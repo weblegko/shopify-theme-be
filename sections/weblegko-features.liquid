@@ -1,15 +1,20 @@
 <!-- sections/weblegko-features.liquid -->
 
 <section class="tw:bg-seriy tw:text-grayscale-950 tw:px-[1.6rem]">
-  <div class="tw:max-w-[112rem] tw:mx-auto tw:py-[1.5rem] tw:lg:py-[2rem]">
-
+  <div class="tw:max-w-[112rem] tw:mx-auto tw:pt-[0.5rem] tw:pb-[0rem] tw:md:py-[2rem]">
     <!-- Сетка карточек (1 колонка на мобилке, 3 на десктопе) -->
-    <div class="tw:grid tw:grid-cols-1 tw:md:grid-cols-3 tw:gap-[1rem] tw:lg:gap-12">
+    <div class="tw:grid tw:grid-cols-1 tw:md:grid-cols-3 tw:gap-[0.5rem] tw:lg:gap-12">
       {%- for block in section.blocks -%}
-        <div {{ block.shopify_attributes }}>
+        <div
+          class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          {% if settings.animations_reveal_on_scroll %}
+            data-cascade
+            style="--animation-order: {{ forloop.index }};"
+          {% endif %}
+          {{ block.shopify_attributes }}
+        >
           <!-- КАРТОЧКА -->
           <div class="tw:flex tw:flex-col tw:items-center tw:text-center tw:gap-[1rem]">
-
             <!-- Иконка -->
             {%- if block.settings.icon_svg != blank -%}
               <div class="tw:w-[4.8rem] tw:h-[4.8rem] tw:lg:w-[6.4rem] tw:lg:h-[6.4rem] tw:flex tw:items-center tw:justify-center  tw:text-goluboy">
@@ -17,7 +22,14 @@
               </div>
             {%- else -%}
               <div class="tw:w-[5rem] tw:h-[5rem] tw:flex tw:items-center tw:justify-center tw:mb-[2rem] tw:bg-grayscale-50 tw:rounded-full">
-                <svg class="tw:w-[2.4rem] tw:h-[2.4rem] tw:opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path></svg>
+                <svg
+                  class="tw:w-[2.4rem] tw:h-[2.4rem] tw:opacity-50"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path>
+                </svg>
               </div>
             {%- endif -%}
 
@@ -27,12 +39,10 @@
                 {{ block.settings.title }}
               </h3>
             {%- endif -%}
-           
           </div>
         </div>
       {%- endfor -%}
     </div>
-
   </div>
 </section>
 
@@ -40,7 +50,7 @@
 {
   "name": "WEBLEGKO FEATURES",
   "tag": "section",
-  "class": "section-features", 
+  "class": "section-features",
   "blocks": [
     {
       "type": "card",
@@ -57,7 +67,7 @@
           "id": "title",
           "default": "Fast Delivery",
           "label": "Feature Title"
-        }       
+        }
       ]
     }
   ],
@@ -68,19 +78,19 @@
         {
           "type": "card",
           "settings": {
-            "title": "Lab Tested"            
+            "title": "Lab Tested"
           }
         },
         {
           "type": "card",
           "settings": {
-            "title": "Free UK Delivery £40+"            
+            "title": "Free UK Delivery £40+"
           }
         },
         {
           "type": "card",
           "settings": {
-            "title": "30-Day Returns"         
+            "title": "30-Day Returns"
           }
         }
       ]

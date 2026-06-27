@@ -49,10 +49,10 @@
 </noscript>
 
 <section class="tw:bg-seriy tw:text-grayscale-950 tw:px-[1.6rem]">
-  <div class="tw:max-w-[112rem] tw:mx-auto tw:pt-[5rem] tw:pb-[5rem] tw:lg:pt-[12.8rem] tw:lg:pb-[6.4rem]">
+  <div class="tw:max-w-[112rem] tw:mx-auto tw:pt-[5rem] tw:pb-[5rem] tw:md:pt-[12.8rem] tw:md:pb-[6.4rem]">
     <!-- Заголовок секции -->
     {%- if section.settings.heading != blank -%}
-      <div class="tw:flex tw:flex-col tw:items-center tw:gap-[1rem] tw:mb-[3rem]">
+      <div class="tw:flex tw:flex-col tw:items-center tw:gap-[1rem] tw:mb-[2.5rem] tw:md:mb-[3rem]">
         <h2 class="tw:text-[2.4rem] tw:sm:text-[4rem] tw:font-medium tw:tracking-[-0.04em] tw:leading-[1.2] tw:text-center">
           {{ section.settings.heading }}
         </h2>
@@ -68,13 +68,20 @@
     {%- endif -%}
 
     <!-- Сетка карточек -->
-    <div id="reviews-grid" class="tw:grid tw:grid-cols-1 tw:md:grid-cols-2 tw:lg:grid-cols-3 tw:gap-8">
+    <div
+      id="reviews-grid"
+      class="tw:grid tw:grid-cols-1 tw:md:grid-cols-2 tw:lg:grid-cols-3 tw:gap-8 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+      {% if settings.animations_reveal_on_scroll %}
+        data-cascade
+        style="--animation-order: {{ forloop.index }};"
+      {% endif %}
+    >
       {%- for block in section.blocks -%}
         <div class="review-item tw:hidden" {{ block.shopify_attributes }}>
           <!-- card -->
           <a
             href="{{ block.settings.review_link }}"
-            class="tw:hover:scale-[101%] tw:hover:shadow-lg tw:transition-all tw:duration-300 tw:bg-white tw:rounded-xl tw:p-[1.5rem] tw:h-full tw:flex tw:flex-col"
+            class="tw:hover:scale-[101%] tw:hover:shadow-lg tw:transition-all tw:duration-300 tw:bg-white tw:rounded-[1.2rem] tw:p-[1.5rem] tw:h-full tw:flex tw:flex-col"
           >
             <!-- Звезды (Динамический вывод из настроек) -->
             <div class="tw:flex tw:gap-1 tw:mb-4">
@@ -121,7 +128,7 @@
         <button
           type="button"
           id="reviews-show-more-btn"
-          class="tw:mt-[4rem] tw:inline-flex tw:items-center tw:justify-center tw:rounded-full tw:transition-colors tw:duration-300 tw:ease-in-out tw:hover:bg-golden tw:px-[1.6rem] tw:pt-1 tw:h-[3.6rem] tw:bg-white tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium tw:shadow-md disabled:tw:opacity-70 disabled:tw:cursor-not-allowed"
+          class="tw:mt-[2.5rem] tw:md:mt-[4rem] tw:inline-flex tw:items-center tw:justify-center tw:rounded-full tw:transition-colors tw:duration-300 tw:ease-in-out tw:hover:bg-golden tw:px-[1.6rem] tw:pt-1 tw:h-[3.6rem] tw:bg-white tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium tw:shadow-md disabled:tw:opacity-70 disabled:tw:cursor-not-allowed"
         >
           <!-- Спиннер загрузки -->
           <svg

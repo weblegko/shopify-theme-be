@@ -248,7 +248,7 @@
         font-weight: var(--font-body-weight);
       }
 
-      @media screen and (min-width: 75rem) {
+      @media screen and (min-width: 750px) {
         body {
           font-size: 1.6rem;
         }
@@ -256,7 +256,7 @@
     {% endstyle %}
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
-    {{ 'custom.css' | asset_url | stylesheet_tag }}
+    {{ 'custom.css' | asset_url | stylesheet_tag }}    
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
@@ -292,42 +292,41 @@
       >
     {%- endif -%}
 
-    {% comment %} подключаем таилвинд {% endcomment %}
+    
+    <!-- Добавляем Tailwind -->
     {{ 'tailwind.css' | asset_url | stylesheet_tag }}
 
+    <!-- Добавляем Swiper -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+
 
     <script>
       if (Shopify.designMode) {
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
+
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
-    {% comment %} подключаем спрайт {% endcomment %}
     {% render 'weblegko-sprite' %}
-
+    
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{ 'accessibility.skip_to_text' | t }}
     </a>
 
     {%- if settings.cart_type == 'drawer' -%}
       {%- render 'cart-drawer' -%}
-   {%- endif -%}
+    {%- endif -%}
 
-    <div class="tw:bg-seriy tw:flex tw:flex-col tw:min-h-[100vh] tw:min-h-[100dvh] tw:min-w-[32rem]">
-      {% sections 'header-group' %}
+    {% sections 'header-group' %}
 
-      <main id="MainContent" class="tw:mt-[5.6rem] content-for-layout focus-none" role="main" tabindex="-1">
-        {{ content_for_layout }}
-      </main>
+    <main id="MainContent" class="tw:pt-[5.6rem] content-for-layout focus-none" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
 
-      <div class="tw:mt-auto">
-        {% sections 'footer-group' %}
-      </div>
-    </div>
+    {% sections 'footer-group' %}
 
     <ul hidden>
       <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
@@ -387,7 +386,7 @@
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
-    <script type="module">
+     <script type="module">
       import { initAutoRem } from '{{ "auto-rem.js" | asset_url }}';
       import { initViewport } from '{{ "viewport.js" | asset_url }}';
       initAutoRem({ baseSiteWidth: 1440, baseFontSize: 10 }); // для Dawn baseFontSize = 10

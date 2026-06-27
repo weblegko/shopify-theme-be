@@ -247,12 +247,12 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
   font-weight: var(--font-body-weight);
 }
 
-/* 
-h1,
+/* h1,
 h2,
 h3,
 h4,
 h5, */
+h1,
 .h0,
 .h1,
 .h2,
@@ -294,7 +294,7 @@ h5, */
   }
 }
 
-/* h1, */
+h1,
 .h1 {
   font-size: calc(var(--font-heading-scale) * 3rem);
 }
@@ -717,12 +717,10 @@ summary::-webkit-details-marker {
 }
 
 *:focus-visible {
-  /* outline: var(--focused-base-outline); */
-  /* outline-offset: var(--focused-base-outline-offset); */
-  /* box-shadow: var(--focused-base-box-shadow); */
-  outline: 0.0625rem rgb(211, 211, 211) solid;
-
-} 
+  outline: var(--focused-base-outline);
+  outline-offset: var(--focused-base-outline-offset);
+  box-shadow: var(--focused-base-box-shadow);
+}
 
 /* Fallback - for browsers that don't support :focus-visible, a fallback is set for :focus */
 .focused {

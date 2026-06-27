@@ -5,6 +5,19 @@
   {% render 'header-dropdown-menu' %}
 {% endcomment %}
 
+{% comment %} webleko inline styles {% endcomment %}
+<style>
+  .header__menu-item span{
+    text-decoration:none !important;
+  }
+  .header__active-menu-item {
+    -webkit-text-stroke: 0.5px currentColor;
+    text-stroke: 0.5px currentColor;
+    text-decoration: none !important;
+    pointer-events: none; /* чтобы нельзя было кликнуть на активную */
+  }
+</style>
+
 <nav class="header__inline-menu">
   <ul class="list-menu list-menu--inline" role="list">
     {%- for link in section.settings.menu.links -%}

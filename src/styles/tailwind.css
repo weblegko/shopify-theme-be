@@ -2,6 +2,7 @@
 @config "../../tailwind.config.js";
 
 @import "./fonts.css";
+@import "./weblegko-buttons.css";
 
 html {
   scrollbar-gutter: stable;
@@ -13,17 +14,6 @@ html {
 body {
   @apply tw:font-poppins tw:text-grayscale-950;
 }
-
-/* делаем шапку липкой и задаем жестко белый фон  */
-.shopify-section-group-header-group {
-  position: fixed; 
-  top: 0;
-  left: 0;
-  right: 0;  
-  background: white;
-}
-
-
 
 
 /********************************************

@@ -2,7 +2,7 @@
 
 <!-- Скрываем на мобилке (tw:hidden), показываем от md (768px) -->
 <section class="tw:hidden tw:md:flex tw:bg-grayscale-50 tw:text-grayscale-950">
-  <div class="tw:max-w-[112rem] tw:px-[1.6rem]  tw:mx-auto tw:w-full tw:flex tw:items-stretch tw:gap-[5rem] tw:lg:gap-[7rem] tw:py-[8rem] tw:lg:py-[12rem]">
+  <div class="tw:max-w-[112rem] tw:px-[1.6rem]  tw:mx-auto tw:w-full tw:flex tw:items-stretch tw:gap-[5rem] tw:md:gap-[7rem] tw:py-[8rem] tw:md:py-[12rem]">
     <!-- ЛЕВАЯ КОЛОНКА : Картинка доктора -->
     <div class="tw:w-[53%] tw:flex tw:items-center tw:justify-center">
       {% if section.settings.doctor_image != blank %}
@@ -37,15 +37,17 @@
 
       <!-- Ряд 3: Кнопка Learn More -->
       {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-        <div class="tw:-mt-[1rem] tw:mb-[1rem]">
-          <a
-            href="{{ section.settings.button_link }}"
-            class="tw:inline-flex tw:items-center tw:justify-center tw:rounded-full tw:transition-colors tw:duration-300 tw:ease-in-out 
-            tw:hover:bg-golden tw:px-[1.6rem] tw:pt-1 tw:h-[3.6rem] tw:bg-white tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium tw:shadow-md"
-          >
-            {{ section.settings.button_label }}
-          </a>
-        </div>
+        <div class="tw:mt-[2rem]">
+        <a
+          href="{{ section.settings.button_link }}"
+          class="
+            tw:inline-flex tw:items-center tw:justify-center tw:rounded-full tw:transition-colors tw:duration-300 tw:ease-in-out
+            tw:hover:bg-golden tw:px-[1.6rem] tw:pt-1 tw:h-[3.6rem] tw:bg-white tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium tw:shadow-md
+          "
+        >
+          {{ section.settings.button_label }}
+        </a>
+      </div>
       {% endif %}
     </div>
   </div>
@@ -65,7 +67,7 @@
     {
       "type": "richtext",
       "id": "quote_text",
-      "default": "<p>Our bodies are capable of incredible healing when given the right nutrients and care. I've dedicated my life to helping people unlock their health potential naturally, without relying on quick fixes.</p>",
+      "default": "<p>Dr. Eric Berg is a renowned expert in healthy ketosis and intermittent fasting. With over 15 million subscribers worldwide, Dr. Berg has dedicated his career to helping people achieve optimal health through natural nutrition.</p><p>All supplements are scientifically formulated with the highest quality natural ingredients, ensuring maximum effectiveness and safety.</p>",
       "label": "Quote Text"
     },
     {

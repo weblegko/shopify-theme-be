@@ -65,15 +65,14 @@
         {%- form 'customer', id: 'BannerNewsletter', class: 'newsletter-form' -%}
           <input type="hidden" name="contact[tags]" value="newsletter">
 
-          <div class="tw:flex tw:flex-col tw:gap-[1.6rem]">           
-
+          <div class="tw:flex tw:flex-col tw:gap-[1.6rem]">
             <!-- Инпут с Label -->
             <div class="block">
               <label
                 for="BannerEmail-{{ section.id }}"
                 class="tw:mb-2 tw:block tw:text-[1.4rem] tw:text-grayscale-400 tw:tracking-[-0.04em] tw:leading-[1.43]"
               >
-                Email 
+                Email
               </label>
               <input
                 id="BannerEmail-{{ section.id }}"
@@ -100,17 +99,23 @@
                 </svg>
               </span>
 
-              <span class="tw:text-[1.4rem] tw:text-grayscale-400 tw:tracking-[-0.04em] tw:leading-[1.43]"
-                >By clicking "Subscribe", I agree to the
-                <a
-                  href="{% if section.settings.privacy_link != blank %}{{ section.settings.privacy_link }}{% else %}#{% endif %}"
-                  style="text-decoration-skip-ink: none; text-decoration: underline;"
-                  >privacy policy</a
-                >.
+              <span class="tw:text-[1.4rem] tw:tracking-[-0.04em] tw:leading-[1.43]"
+                ><span class="tw:text-grayscale-400">By clicking "Subscribe", I agree to the </span>
+                {%- for policy in shop.policies -%}
+                  {%- if policy.url contains 'privacy' or policy.type == 'privacy' -%}
+                    <a
+                      class="tw:text-grayscale-950"
+                      href="{{ policy.url }}"
+                      style="text-decoration-skip-ink: none; text-decoration: underline;"
+                    >privacy policy
+                  </a>
+                  {%- endif -%}
+                {%- endfor -%}
+                .
               </span>
             </label>
 
-             {%- if form.posted_successfully? -%}
+            {%- if form.posted_successfully? -%}
               <h3
                 class="tw:text-green-600 tw:text-[1.4rem] tw:font-medium tw:leading-[1.43] tw:tracking-[-0.04em]"
                 tabindex="-1"
@@ -121,7 +126,10 @@
             {%- endif -%}
 
             {%- if form.errors -%}
-              <small class="tw:text-red-500 tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:block" id="BannerNewsletter-error">
+              <small
+                class="tw:text-red-500 tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:block"
+                id="BannerNewsletter-error"
+              >
                 {{ form.errors.translated_fields.email | capitalize }}
                 {{ form.errors.messages.email }}
               </small>
@@ -193,11 +201,6 @@
       "id": "text",
       "default": "Subscribe to our newsletter and receive exclusive offers and news! Fill out the form below or message us to stay updated on all the great deals and special offers.",
       "label": "Description Text"
-    },
-    {
-      "type": "url",
-      "id": "privacy_link",
-      "label": "Privacy Policy Link"
     }
   ],
   "presets": [

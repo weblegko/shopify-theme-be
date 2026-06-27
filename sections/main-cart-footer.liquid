@@ -104,23 +104,38 @@
                 </small>
               </div>
             {%- else -%}
-              <div class="cart__ctas" {{ block.shopify_attributes }}>
-                <form action="{{ routes.cart_url }}" method="post" id="cart-page-checkout-form" class="tw:w-full">
+              {%- if settings.cart_type == 'drawer' -%}
+                <form action="{{ routes.cart_url }}" method="post" id="cart-drawer-form">
+                  <div class="cart__ctas" {{ block.shopify_attributes }}>
+                    <button
+                      type="submit"
+                      id="checkout"
+                      class="cart__checkout-button button button--golden"
+                      name="checkout"
+                      {% if cart == empty %}
+                        disabled
+                      {% endif %}
+                    >
+                      {{ 'sections.cart.checkout' | t }}
+                    </button>
+                  </div>
+                </form>
+              {%- else -%}
+                <div class="cart__ctas" {{ block.shopify_attributes }}>
                   <button
                     type="submit"
                     id="checkout"
-                    class="cart__checkout-button button"
+                    class="cart__checkout-button button button--golden"
                     name="checkout"
                     {% if cart == empty %}
                       disabled
                     {% endif %}
-                    {% comment %} form="cart"  {% endcomment %}
+                    form="cart"
                   >
                     {{ 'sections.cart.checkout' | t }}
                   </button>
-                </form>
-              </div>
-
+                </div>
+              {%- endif -%}
               {%- if additional_checkout_buttons -%}
                 <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
                   {{ content_for_additional_checkout_buttons }}

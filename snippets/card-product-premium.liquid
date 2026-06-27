@@ -40,11 +40,21 @@
     z-index: 2;
   }
 </style>
+
+{% assign has_features = false %}
+{% if card_product.metafields.custom.feature_1 != blank
+  or card_product.metafields.custom.feature_2 != blank
+  or card_product.metafields.custom.feature_3 != blank
+  or card_product.metafields.custom.feature_4 != blank
+%}
+  {% assign has_features = true %}
+{% endif %}
+
 {%- if card_product and card_product != empty -%}
   {%- liquid
     assign ratio = 1
   -%}
-  <div class="tw:hover:shadow-lg tw:hover:scale-[101%] tw:transition tw:duration-300 tw:rounded-[1.6rem] tw:bg-white tw:px-3 tw:pt-3 tw:pb-6 tw:overflow-hidden card-wrapper product-card-wrapper underline-links-hover">
+  <div class="tw:h-full tw:hover:shadow-lg tw:hover:scale-[101%] tw:transition tw:duration-300 tw:rounded-[1.6rem] tw:bg-white tw:px-3 tw:pt-3 tw:pb-6 tw:overflow-hidden card-wrapper product-card-wrapper underline-links-hover">
     <div
       class="
         card card--{{ settings.card_style }}
@@ -147,8 +157,9 @@
           </div>
         </div>
       </div>
-      <div class="tw:!px-4 card__content">
-        <div class="tw:!flex tw:!flex-col tw:flex-1 card__information">
+
+      <div class="card__content">
+        <div class="tw:!px-4 tw:!flex tw:!flex-col tw:flex-1 card__information">
           <h3
             class="card__heading{% if card_product.featured_media or settings.card_style == 'standard' %} h5{% endif %}"
             {% if card_product.featured_media or settings.card_style == 'card' %}
@@ -158,19 +169,23 @@
             <a
               href="{{ card_product.url }}"
               id="CardLink-{{ section_id }}-{{ card_product.id }}"
-              class="tw:!line-clamp-2 tw:!font-poppins tw:!text-left tw:font-medium tw:text-[1.8rem] tw:leading-[1.33] tw:tracking-[-0.01em] tw:text-grayscale-950 full-unstyled-link"
+              class="tw:min-h-[4.7rem] tw:!line-clamp-2 tw:!font-poppins tw:!text-left tw:font-medium tw:text-[1.8rem] tw:leading-[1.33] tw:tracking-[-0.01em] tw:text-grayscale-950 full-unstyled-link"
               aria-labelledby="CardLink-{{ section_id }}-{{ card_product.id }} Badge-{{ section_id }}-{{ card_product.id }}"
             >
               {{ card_product.title | escape }}
             </a>
           </h3>
           {%- if card_product.description != blank -%}
-            <p class="tw:!text-left tw:!mt-[0.6rem] tw:!text-[1.2rem] tw:!leading-[1.33] tw:!tracking-[-0.01em] tw:!text-grayscale-600 tw:!line-clamp-2 tw:!font-poppins">
+            <p class="tw:min-h-[3.35rem] tw:!text-left tw:!mt-[0.6rem] tw:!text-[1.2rem] tw:!leading-[1.33] tw:!tracking-[-0.01em] tw:!text-grayscale-600 tw:!line-clamp-2 tw:!font-poppins">
               {{ card_product.description | strip_html | strip_newlines | truncate: 150 }}
             </p>
           {%- endif -%}
 
-          <div class="tw:mt-auto card-information">
+          <div class="tw:w-full tw:h-[0.1rem] tw:bg-grayscale-50 tw:mt-[1.5rem] tw:mb-[1rem]">
+            <span></span>
+          </div>
+
+          <div class="card-information">
             {%- if show_vendor -%}
               <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
               <div class="caption-with-letter-spacing light">{{ card_product.vendor }}</div>
@@ -317,10 +332,85 @@
               {% endif %}
             {%- endif -%}
           </div>
+
+          <div class="tw:w-full tw:h-[0.1rem] tw:bg-grayscale-50 tw:mt-[0.5rem] tw:mb-[1.5rem]">
+            <span></span>
+          </div>
+
+          {% if has_features %}
+            <div class="tw:flex tw:flex-col tw:gap-3 tw:mb-[3rem]">
+              {% if card_product.metafields.custom.feature_1 != blank %}
+                <div class="tw:flex tw:items-center tw:gap-2 tw:px-[0.8rem] tw:min-h-[3.2rem] tw:rounded-full tw:border tw:border-grayscale-100">
+                  <svg
+                    class="tw:w-[1.6rem] tw:h-[1.6rem] tw:text-additional-green"
+                    focusable="false"
+                    aria-hidden="true"
+                  >
+                    <use href="#check"></use>
+                  </svg>
+                  <span class="tw:my-[0.6rem] tw:text-[1.2rem] tw:leading-[1.1] tw:tracking-[-0.04em]">
+                    {{ card_product.metafields.custom.feature_1 }}
+                  </span>
+                </div>
+              {% endif %}
+
+              {% if card_product.metafields.custom.feature_2 != blank %}
+                <div class="tw:flex tw:items-center tw:gap-2 tw:px-[0.8rem] tw:min-h-[3.2rem] tw:rounded-full tw:border tw:border-grayscale-100">
+                  <svg
+                    class="tw:w-[1.6rem] tw:h-[1.6rem] tw:text-additional-green"
+                    focusable="false"
+                    aria-hidden="true"
+                  >
+                    <use href="#check"></use>
+                  </svg>
+                  <span class="tw:my-[0.6rem] tw:text-[1.2rem] tw:leading-[1.1] tw:tracking-[-0.04em]">
+                    {{ card_product.metafields.custom.feature_2 }}
+                  </span>
+                </div>
+              {% endif %}
+
+              {% if card_product.metafields.custom.feature_3 != blank %}
+                <div class="tw:flex tw:items-center tw:gap-2 tw:px-[0.8rem] tw:min-h-[3.2rem] tw:rounded-full tw:border tw:border-grayscale-100">
+                  <svg
+                    class="tw:w-[1.6rem] tw:h-[1.6rem] tw:text-additional-green"
+                    focusable="false"
+                    aria-hidden="true"
+                  >
+                    <use href="#check"></use>
+                  </svg>
+                  <span class="tw:my-[0.6rem] tw:text-[1.2rem] tw:leading-[1.1] tw:tracking-[-0.04em]">
+                    {{ card_product.metafields.custom.feature_3 }}
+                  </span>
+                </div>
+              {% endif %}
+
+              {% if card_product.metafields.custom.feature_4 != blank %}
+                <div class="tw:flex tw:items-center tw:gap-2 tw:px-[0.8rem] tw:min-h-[3.2rem] tw:rounded-full tw:border tw:border-grayscale-100">
+                  <svg
+                    class="tw:w-[1.6rem] tw:h-[1.6rem] tw:text-additional-green"
+                    focusable="false"
+                    aria-hidden="true"
+                  >
+                    <use href="#check"></use>
+                  </svg>
+                  <span class="tw:my-[0.6rem] tw:text-[1.2rem] tw:leading-[1.1] tw:tracking-[-0.04em]">
+                    {{ card_product.metafields.custom.feature_4 }}
+                  </span>
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          <a
+            class="tw:mt-auto tw:mb-4 tw:tracking-[-0.04em] tw:font-medium tw:block tw:text-center"
+            href="{{ product.url }}"
+            >More info</a
+          >
         </div>
+
         {% assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id %}
         {% if quick_add == 'standard' %}
-          <div class="quick-add no-js-hidden">
+          <div class="tw:!px-4  quick-add no-js-hidden">
             {%- liquid
               assign qty_rules = false
               if card_product.selected_or_first_available_variant.quantity_rule.min > 1 or card_product.selected_or_first_available_variant.quantity_rule.max != null or card_product.selected_or_first_available_variant.quantity_rule.increment > 1
@@ -384,6 +474,7 @@
                       disabled
                     {% endif %}
                   >
+
                   <button
                     id="{{ product_form_id }}-submit"
                     type="submit"
@@ -399,7 +490,8 @@
                   >
                     <span>
                       {%- if card_product.selected_or_first_available_variant.available -%}
-                        {{ 'products.product.add_to_cart' | t }}
+                        Get started
+                        {% comment %} {{ 'products.product.add_to_cart' | t }} {% endcomment %}
                       {%- else -%}
                         {{ 'products.product.sold_out' | t }}
                       {%- endif -%}
@@ -418,6 +510,7 @@
               </product-form>
             {%- endif -%}
           </div>
+
         {% elsif quick_add == 'bulk' %}
           {% if card_product.variants_count == 1 %}
             <quick-add-bulk

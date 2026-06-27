@@ -1,10 +1,51 @@
 <!-- sections/weblegko-popular-products.liquid -->
 
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{% if section.settings.image_shape == 'blob' %}
+  {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+{%- endunless -%}
+
+{%- if section.settings.quick_add == 'standard' -%}
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- if section.settings.quick_add == 'bulk' -%}
+  <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+<style>
+  .section-popular-products .tw\:grid > * {
+    display: flex !important;
+  }
+  .section-popular-products .product-card-wrapper,
+  .section-popular-products .product-card-wrapper .card {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .section-popular-products .card__content:last-child {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+</style>
+
 <section class="tw:bg-seriy tw:text-grayscale-950 tw:px-[1.6rem]">
-  <div class="tw:max-w-[112rem] tw:mx-auto tw:py-[5rem] tw:lg:py-[12.8rem]">
+  <div class="tw:max-w-[112rem] tw:mx-auto tw:py-[5rem] tw:md:pt-[10rem] tw:md:pb-[12.8rem]">
     <!-- Заголовок -->
     {%- if section.settings.heading != blank -%}
-      <div class="tw:flex tw:flex-col tw:items-center tw:gap-[1rem] tw:mb-[3rem]">
+      <div class="tw:flex tw:flex-col tw:items-center tw:gap-[1rem] tw:mb-[2.5rem] tw:md:mb-[3rem]">
         <h2 class="tw:text-[2.4rem] tw:sm:text-[4rem] tw:font-medium tw:tracking-[-0.04em] tw:leading-[1.33] tw:lg:leading-[1.2] tw:text-center">
           {{ section.settings.heading }}
         </h2>
@@ -19,190 +60,33 @@
     {%- endif -%}
 
     <!-- Сетка товаров -->
-    <div class="tw:grid tw:grid-cols-1 tw:sm:grid-cols-2 tw:lg:grid-cols-3 tw:gap-[2rem]">
+    <div
+      id="product-grid"
+      data-id="{{ section.id }}"
+      class="tw:grid tw:grid-cols-1 tw:sm:grid-cols-2 tw:lg:grid-cols-3 tw:gap-[2rem]"
+    >
       {%- if section.settings.collection != blank -%}
         {%- for product in section.settings.collection.products limit: 6 -%}
-          {%- assign variant = product.selected_or_first_available_variant -%}
-          {%- assign product_form_id = 'quick-add-' | append: section.id | append: '-' | append: product.id -%}
-          {%- assign qty_rules = false -%}
-          {%- if variant.quantity_rule.min > 1
-            or variant.quantity_rule.max != null
-            or variant.quantity_rule.increment > 1
-          -%}
-            {%- assign qty_rules = true -%}
-          {%- endif -%}
-
+          <!-- ===== ВСТАВЛЯЕМ КАРТОЧКУ ИЗ card-product.liquid ===== -->
           <div
-            class="tw:flex tw:flex-col tw:h-full tw:hover:scale-[101%] tw:hover:shadow-lg tw:transition-all tw:duration-300 tw:group tw:px-[0.8rem] tw:pt-[0.8rem] tw:pb-[1.6rem] tw:rounded-[1.6rem] tw:bg-white tw:overflow-hidden"
-            data-product-id="{{ product.id }}"
-            data-variant-id="{{ variant.id }}"
-            data-product-title="{{ product.title | escape }}"
-            data-product-price="{{ variant.price | money_without_currency | strip }}"
-            data-product-image="{{ product.featured_image | image_url: width: 200 }}"
-            data-product-url="{{ product.url }}"
+            class="tw:flex tw:flex-col {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {% if settings.animations_reveal_on_scroll %}
+              data-cascade
+              style="--animation-order: {{ forloop.index }};"
+            {% endif %}
           >
-            <!-- Картинка -->
-            <a
-              href="{{ product.url }}"
-              class="tw:block tw:aspect-square tw:overflow-hidden tw:rounded-[0.8rem] tw:mb-[1.6rem] tw:bg-[#f2f1ed]"
-            >
-              {%- if product.featured_image -%}
-                <img
-                  src="{{ product.featured_image | image_url: width: 600 }}"
-                  alt="{{ product.featured_image.alt | escape }}"
-                  class="tw:w-full tw:h-full tw:object-cover tw:transition-transform tw:duration-300 group-hover:tw:scale-105"
-                  loading="lazy"
-                  width="600"
-                  height="600"
-                >
-              {%- else -%}
-                <div class="tw:w-full tw:h-full tw:flex tw:items-center tw:justify-center">
-                  {{ 'product-1' | placeholder_svg_tag: 'tw:w-[6rem] tw:h-[6rem] tw:text-[#d4d4d4]' }}
-                </div>
-              {%- endif -%}
-            </a>
-
-            <!-- Информация -->
-            <div class="tw:px-[1rem] tw:flex tw:flex-col tw:flex-1">
-              <a href="{{ product.url }}">
-                <h3 class="tw:text-[1.8rem] tw:font-medium tw:tracking-[-0.01em] tw:text-grayscale-950 tw:hover:text-black tw:leading-[1.33] tw:line-clamp-2 tw:whitespace-normal">
-                  {{ product.title }}
-                </h3>
-              </a>
-
-              {%- if product.description != blank -%}
-                <p class="tw:mb-[0.8rem] tw:mt-[0.6rem] tw:text-[1.2rem] tw:tracking-[-0.01em] tw:text-grayscale-600 tw:leading-[1.33] tw:line-clamp-2 tw:whitespace-normal">
-                  {{ product.description | strip_html }}
-                </p>
-              {%- endif -%}
-
-              <!-- Цены -->
-              <div class="tw:mt-auto tw:flex tw:flex-nowrap tw:gap-[0.8rem]  tw:mb-[1.4rem]">
-                {%- if product.compare_at_price > product.price -%}
-                  {%- assign discount = product.compare_at_price | minus: product.price -%}
-                  {%- assign discount_percentage = discount
-                    | times: 100.0
-                    | divided_by: product.compare_at_price
-                    | round
-                  -%}
-                  <span class="tw:text-[2.4rem] tw:font-medium tw:whitespace-nowrap tw:text-grayscale-950 tw:leading-[1.33] tw:tracking-[-0.01em]">
-                    <span>From</span>
-                    <span class="tw:text-additional-red">
-                      {{ product.price | money }}
-                    </span>
-                  </span>
-                  <span class="tw:text-[1.4rem] tw:text-grayscale-400 tw:leading-[1.43] tw:tracking-[-0.01em] tw:line-through tw:whitespace-nowrap">
-                    {{ product.compare_at_price | money }}
-                  </span>
-                  <span class="tw:mt-1 tw:shrink-0 tw:px-[0.8rem] tw:h-[2.8rem] tw:bg-golden tw:text-[1.4rem] tw:text-grayscale-950 tw:leading-[1] tw:flex tw:items-center tw:justify-center tw:uppercase tw:rounded-full">
-                    {{ discount_percentage }}% off
-                  </span>
-                {%- else -%}
-                  <span class="tw:text-[2.4rem] tw:font-medium tw:whitespace-nowrap tw:text-grayscale-950 tw:leading-[1.33] tw:tracking-[-0.01em]">                    
-                    <span class="tw:text-grayscale-950">
-                      {{ product.price | money }}
-                    </span>
-                  </span>
-                  </span>
-                {%- endif -%}
-              </div>
-
-              <!-- ===== Блок кнопок (скопирован из card-product.liquid) ===== -->
-              <div class="tw:block">
-                {%- if product.variants_count > 1 or qty_rules -%}
-                  <modal-opener data-modal="#QuickAdd-{{ product.id }}">
-                    <button
-                      id="{{ product_form_id }}-submit"
-                      type="submit"
-                      name="add"
-                      class="
-                        tw:w-full tw:border-0 tw:flex tw:items-center tw:justify-center tw:rounded-full tw:transition-colors tw:duration-300
-                        tw:pt-1 tw:px-[1.6rem] tw:h-[4rem] tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium
-                        tw:bg-golden hover:tw:bg-goldendark tw:cursor-pointer
-                      "
-                      aria-haspopup="dialog"
-                      aria-labelledby="{{ product_form_id }}-submit title-{{ section.id }}-{{ product.id }}"
-                      data-product-url="{{ product.url }}"
-                    >
-                      {{ 'products.product.choose_options' | t }}
-                      {%- render 'loading-spinner' -%}
-                    </button>
-                  </modal-opener>
-                  <quick-add-modal id="QuickAdd-{{ product.id }}" class="quick-add-modal">
-                    <div
-                      role="dialog"
-                      aria-label="{{ 'products.product.choose_product_options' | t: product_name: product.title | escape }}"
-                      aria-modal="true"
-                      class="quick-add-modal__content global-settings-popup"
-                      tabindex="-1"
-                    >
-                      <button
-                        id="ModalClose-{{ product.id }}"
-                        type="button"
-                        class="quick-add-modal__toggle"
-                        aria-label="{{ 'accessibility.close' | t }}"
-                      >
-                        {{- 'icon-close.svg' | inline_asset_content -}}
-                      </button>
-                      <div id="QuickAddInfo-{{ product.id }}" class="quick-add-modal__content-info"></div>
-                    </div>
-                  </quick-add-modal>
-                {%- else -%}
-                  <product-form data-section-id="{{ section.id }}">
-                    {%- form 'product',
-                      product,
-                      id: product_form_id,
-                      class: 'form',
-                      novalidate: 'novalidate',
-                      data-type: 'add-to-cart-form'
-                    -%}
-                      <input
-                        type="hidden"
-                        name="id"
-                        value="{{ variant.id }}"
-                        class="product-variant-id"
-                        {% unless variant.available %}
-                          disabled
-                        {% endunless %}
-                      >
-                      <button
-                        id="{{ product_form_id }}-submit"
-                        type="submit"
-                        name="add"
-                        class="
-                          tw:w-full tw:border-0 tw:flex tw:items-center tw:justify-center tw:rounded-full tw:transition-colors tw:duration-300
-                          tw:pt-1 tw:px-[1.6rem] tw:h-[4rem] tw:text-[1.4rem] tw:leading-[1.43] tw:tracking-[-0.04em] tw:font-medium
-                          {% if variant.available %}
-                            tw:bg-golden hover:tw:bg-goldendark tw:cursor-pointer
-                          {% else %}
-                            tw:bg-gray-400 tw:cursor-not-allowed tw:opacity-70
-                          {% endif %}
-                        "
-                        aria-haspopup="dialog"
-                        aria-labelledby="{{ product_form_id }}-submit title-{{ section.id }}-{{ product.id }}"
-                        aria-live="polite"
-                        data-sold-out-message="true"
-                        {% unless variant.available %}
-                          disabled
-                        {% endunless %}
-                      >
-                        <span>
-                          {%- if variant.available -%}
-                            {{ 'products.product.add_to_cart' | t }}
-                          {%- else -%}
-                            {{ 'products.product.sold_out' | t }}
-                          {%- endif -%}
-                        </span>
-                        <span class="sold-out-message hidden">
-                          {{ 'products.product.sold_out' | t }}
-                        </span>
-                        {%- render 'loading-spinner' -%}
-                      </button>
-                    {%- endform -%}
-                  </product-form>
-                {%- endif -%}
-              </div>
-            </div>
+            {% render 'card-product',
+              card_product: product,
+              media_aspect_ratio: section.settings.image_ratio,
+              image_shape: section.settings.image_shape,
+              show_secondary_image: section.settings.show_secondary_image,
+              show_vendor: section.settings.show_vendor,
+              show_rating: section.settings.show_rating,
+              lazy_load: lazy_load,
+              skip_styles: skip_card_product_styles,
+              quick_add: 'standard',
+              section_id: section.id
+            %}
           </div>
         {%- endfor -%}
 
@@ -244,13 +128,74 @@
     {
       "type": "text",
       "id": "description",
-      "default": "Bestsellers",
+      "default": "Premium supplements for your health",
       "label": "Description Badge"
     },
     {
       "type": "collection",
       "id": "collection",
       "label": "Collection"
+    },
+    {
+      "type": "header",
+      "content": "Product Card"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "adapt",
+      "label": "Image ratio"
+    },
+    {
+      "type": "select",
+      "id": "image_shape",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "arch", "label": "Arch" },
+        { "value": "blob", "label": "Blob" },
+        { "value": "chevronleft", "label": "Chevron left" },
+        { "value": "chevronright", "label": "Chevron right" },
+        { "value": "diamond", "label": "Diamond" },
+        { "value": "parallelogram", "label": "Parallelogram" },
+        { "value": "round", "label": "Round" }
+      ],
+      "default": "default",
+      "label": "Image shape"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "Show second image on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "Show product rating",
+      "info": "To display a rating, add a product rating app."
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "default": "none",
+      "label": "Quick add",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "standard", "label": "Standard" },
+        { "value": "bulk", "label": "Bulk" }
+      ]
     }
   ],
   "presets": [

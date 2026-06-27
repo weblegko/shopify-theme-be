@@ -20,11 +20,11 @@
 
 <!-- Слегка серый фон, чтобы белые карточки выделялись -->
 <section class="tw:bg-seriy tw:text-grayscale-950 tw:px-[1.6rem]">
-  <div class="tw:max-w-[112rem] tw:mx-auto tw:py-[5rem] tw:lg:py-[6.4rem]">
+  <div class="tw:max-w-[112rem] tw:mx-auto tw:py-[5rem] tw:md:py-[6.4rem]">
     <!-- Заголовок секции -->
     {%- if section.settings.heading != blank -%}
       <div class="tw:flex tw:flex-col tw:items-center tw:gap-[1rem] tw:mb-[3rem]">
-        <h2 class="tw:text-[2.4rem] tw:sm:text-[4rem] tw:font-medium tw:tracking-[-0.04em] tw:leading-[1.2] tw:text-center">
+        <h2 class="tw:font-poppins tw:text-[2.4rem] tw:sm:text-[4rem] tw:font-medium tw:tracking-[-0.04em] tw:leading-[1.2] tw:text-center">
           {{ section.settings.heading }}
         </h2>
 
@@ -40,17 +40,25 @@
     {%- endif -%}
 
     <!-- Контейнер для карточек -->
-    <div class="tw:flex tw:flex-col tw:gap-6">
+    <div
+      class="tw:flex tw:flex-col tw:gap-6 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+      {% if settings.animations_reveal_on_scroll %}
+        data-cascade
+        style="--animation-order: {{ forloop.index }};"
+      {% endif %}
+    >
       {%- for block in section.blocks -%}
         <!-- КАРТОЧКА -->
         <!-- Добавлен {% if forloop.first %} open{% endif %} чтобы первый был открыт -->
         <details
-          class="faq-animate tw:hover:scale-[101%] tw:hover:shadow-lg tw:transition-all tw:duration-300 tw:group tw:bg-white tw:rounded-xl tw:border tw:border-gray-200 tw:shadow-sm tw:overflow-hidden"
-          {% if forloop.first %} open{% endif %}
+          class="faq-animate tw:hover:scale-[101%] tw:hover:shadow-lg tw:transition-all tw:duration-300 tw:group tw:bg-white tw:rounded-[1.2rem] tw:border tw:border-gray-200 tw:shadow-sm tw:overflow-hidden"
+          {% if forloop.first %}
+            open
+          {% endif %}
           {{ block.shopify_attributes }}
         >
           <!-- Заголовок вопроса -->
-          <summary class="tw:flex tw:justify-between tw:items-start tw:p-[2rem] tw:cursor-pointer tw:transition-colors">
+          <summary class="tw:flex tw:justify-between tw:items-start tw:p-[1.5rem] tw:md:p-[2rem] tw:cursor-pointer tw:transition-colors">
             <span
               class="
                 tw:pt-1 tw:text-[1.4rem] tw:font-medium tw:pr-8 tw:leading-[1.4] tw:tracking-[-0.04em]
@@ -164,7 +172,7 @@
 
       const el = summary.parentElement;
       const content = el.querySelector('.faq-content');
-      
+
       if (el.animating) return;
 
       if (el.open) {
@@ -186,7 +194,7 @@
     {
       "type": "text",
       "id": "heading",
-      "default": "FAQ",
+      "default": "Frequently Asked Questions",
       "label": "Heading"
     },
     {
@@ -231,13 +239,53 @@
       "name": "WEBLEGKO FAQ",
       "blocks": [
         {
-          "type": "question"
+          "type": "question",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We accept returns within 30 days of purchase. Items must be in their original condition, unused, and with all tags attached. Refunds are processed within 5-7 business days.</p>"
+          }
         },
         {
-          "type": "question"
+          "type": "question",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "<p>Standard shipping typically takes 3-5 business days within the US. Express shipping is available for 1-2 business day delivery. International shipping times vary by destination.</p>"
+          }
         },
         {
-          "type": "question"
+          "type": "question",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "<p>Yes, we ship to over 50 countries worldwide. International shipping rates and delivery times are calculated at checkout based on your location.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "What payment methods do you accept?",
+            "answer": "<p>We accept all major credit cards (Visa, MasterCard, American Express), PayPal, Apple Pay, Google Pay, and Shop Pay. All transactions are secure and encrypted.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How can I track my order?",
+            "answer": "<p>Once your order ships, you'll receive a confirmation email with a tracking number. You can also track your order in your account dashboard under 'Order History'.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer discounts for bulk orders?",
+            "answer": "<p>Yes, we offer volume discounts for bulk orders over $500. Please contact our sales team at sales@yourstore.com for a custom quote based on your requirements.</p>"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Is my personal information secure?",
+            "answer": "<p>Absolutely! We use industry-standard SSL encryption to protect your data. We never store your payment information, and we never share your personal details with third parties.</p>"
+          }
         }
       ]
     }
