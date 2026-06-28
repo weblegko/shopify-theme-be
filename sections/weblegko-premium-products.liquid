@@ -1,6 +1,7 @@
 <!-- sections/weblegko-premium-products.liquid -->
 
-{%- style -%}  /* Кастомная пагинация для премиум-слайдера */
+{%- style -%}
+  /* Кастомная пагинация для премиум-слайдера */
   .premium-pagination {   
     margin-top: 3rem;
   }
@@ -68,10 +69,32 @@
     height: 100% !important;
     width: 100% !important;
   }
+
+  /* ============================================ */
+  /* ПАДДИНГИ СЕКЦИИ (rem) - inline стили */
+  /* ============================================ */
+  .weblegko-premium-padding {
+    padding-top: {{ section.settings.padding_top_mobile | default: 3 }}rem !important;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 3 }}rem !important;
+  }
+
+  @media screen and (min-width: 640px) {
+    .weblegko-premium-padding {
+      padding-top: {{ section.settings.padding_top_tablet | default: 5 }}rem !important;
+      padding-bottom: {{ section.settings.padding_bottom_tablet | default: 5 }}rem !important;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .weblegko-premium-padding {
+      padding-top: {{ section.settings.padding_top_desktop | default: 8 }}rem !important;
+      padding-bottom: {{ section.settings.padding_bottom_desktop | default: 8 }}rem !important;
+    }
+  }
 {%- endstyle -%}
 
-<section class="tw:md:mt-[8rem] tw:bg-seriy tw:text-grayscale-950 tw:px-[1.6rem]">
-  <div class="tw:max-w-[115rem] tw:mx-auto tw:py-[5rem] tw:md:py-[1.8rem]">
+<section class="tw:bg-seriy tw:text-grayscale-950 tw:px-[1.6rem]">
+  <div class="weblegko-premium-padding tw:max-w-[115rem] tw:mx-auto">
     <!-- Заголовок -->
     {%- if section.settings.heading != blank -%}
       <div class="tw:flex tw:flex-col tw:items-center tw:gap-[1rem] tw:mb-[2.5rem]">
@@ -88,10 +111,10 @@
       </div>
     {%- endif -%}
 
-    {% comment %} дополнительныйц контейнер для ховер теней {% endcomment %}
+    {% comment %} дополнительный контейнер для ховер теней {% endcomment %}
     <div class="tw:sm:pt-[1rem] tw:sm:pb-[2rem] tw:sm:mx-auto tw:sm:max-w-[115rem] tw:sm:!overflow-hidden">
       <!-- Слайдер -->
-      <div class="tw:mx-auto tw:max-w-[112rem] swiper premiumSwiper tw:relative tw:!overflow-visible ">
+      <div class="tw:mx-auto tw:max-w-[112rem] swiper premiumSwiper tw:relative tw:!overflow-visible">
         <div class="swiper-wrapper">
           {%- if section.settings.collection != blank -%}
             {%- for product in section.settings.collection.products -%}
@@ -106,7 +129,7 @@
                     show_rating: section.settings.show_rating,
                     lazy_load: lazy_load,
                     skip_styles: skip_card_product_styles,
-                    quick_add: 'standard',
+                    quick_add: section.settings.quick_add,
                     section_id: section.id
                   %}
                 </div>
@@ -137,9 +160,6 @@
 
     <!-- Пагинация -->
     <div class="premium-pagination tw:flex tw:md:hidden tw:justify-center tw:gap-[0.8rem]"></div>
-
-    <div class="tw:md:h-[10rem]"><span></span></div>
-     
   </div>
 </section>
 
@@ -178,10 +198,15 @@
           paginationEl.appendChild(bullet);
         }
         
+        // Получаем настройки отступов из схемы
+        const spaceBetweenMobile = {{ section.settings.space_between_mobile | default: 1 | times: 10 }};
+        const spaceBetweenTablet = {{ section.settings.space_between_tablet | default: 2 | times: 10 }};
+        const spaceBetweenDesktop = {{ section.settings.space_between_desktop | default: 2 | times: 10 }};
+        
         // Инициализируем Swiper с отключенной пагинацией
         const swiper = new Swiper('.premiumSwiper', {
           slidesPerView: 1,
-          spaceBetween: 10,
+          spaceBetween: spaceBetweenMobile,
           loop: totalSlides > 3 ? true : false,
           speed: 600,
           autoplay: {
@@ -193,15 +218,15 @@
           breakpoints: {
             0: {
               slidesPerView: 1.045,
-              spaceBetween: 10,
+              spaceBetween: spaceBetweenMobile,
             },
             640: {
               slidesPerView: 2,
-              spaceBetween: 20,
+              spaceBetween: spaceBetweenTablet,
             },
             1024: {
               slidesPerView: 3,
-              spaceBetween: 20,
+              spaceBetween: spaceBetweenDesktop,
             },
           },
         });
@@ -332,7 +357,7 @@
   },
   "settings": [
     {
-      "type": "text",
+      "type": "inline_richtext",
       "id": "heading",
       "default": "Premium Products",
       "label": "Heading"
@@ -347,6 +372,108 @@
       "type": "collection",
       "id": "collection",
       "label": "Collection"
+    },
+    {
+      "type": "header",
+      "content": "🖥️ Desktop (≥ 1024px)"
+    },
+    {
+      "type": "range",
+      "id": "space_between_desktop",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 2,
+      "unit": "rem",
+      "label": "Space between slides"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 20,
+      "step": 0.5,
+      "default": 8,
+      "unit": "rem",
+      "label": "Padding top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 20,
+      "step": 0.5,
+      "default": 8,
+      "unit": "rem",
+      "label": "Padding bottom"
+    },
+    {
+      "type": "header",
+      "content": "💻 Tablet (640px - 1024px)"
+    },
+    {
+      "type": "range",
+      "id": "space_between_tablet",
+      "min": 0,
+      "max": 4,
+      "step": 0.5,
+      "default": 2,
+      "unit": "rem",
+      "label": "Space between slides"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_tablet",
+      "min": 0,
+      "max": 15,
+      "step": 0.5,
+      "default": 5,
+      "unit": "rem",
+      "label": "Padding top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_tablet",
+      "min": 0,
+      "max": 15,
+      "step": 0.5,
+      "default": 5,
+      "unit": "rem",
+      "label": "Padding bottom"
+    },
+    {
+      "type": "header",
+      "content": "📱 Mobile (< 640px)"
+    },
+    {
+      "type": "range",
+      "id": "space_between_mobile",
+      "min": 0,
+      "max": 3,
+      "step": 0.5,
+      "default": 1,
+      "unit": "rem",
+      "label": "Space between slides"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 3,
+      "unit": "rem",
+      "label": "Padding top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 3,
+      "unit": "rem",
+      "label": "Padding bottom"
     },
     {
       "type": "header",
@@ -401,7 +528,7 @@
     {
       "type": "select",
       "id": "quick_add",
-      "default": "none",
+      "default": "standard",
       "label": "Quick add",
       "options": [
         { "value": "none", "label": "None" },
@@ -410,11 +537,10 @@
       ]
     }
   ],
-
   "presets": [
     {
       "name": "WEBLEGKO PREMIUM",
-      "category": "Home page",
+      "category": "Home page"
     }
   ]
 }

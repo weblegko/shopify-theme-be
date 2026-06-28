@@ -1,6 +1,50 @@
 <!-- sections/custom-faq.liquid -->
 
-{%- style -%}
+<style>
+  /* ============================================ */
+  /* ПАДДИНГИ СЕКЦИИ (rem) - inline стили */
+  /* ============================================ */
+  .weblegko-faq-padding {
+    padding-top: {{ section.settings.padding_top_mobile | default: 3 }}rem !important;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 3 }}rem !important;
+  }
+
+  @media screen and (min-width: 640px) {
+    .weblegko-faq-padding {
+      padding-top: {{ section.settings.padding_top_tablet | default: 5 }}rem !important;
+      padding-bottom: {{ section.settings.padding_bottom_tablet | default: 5 }}rem !important;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .weblegko-faq-padding {
+      padding-top: {{ section.settings.padding_top_desktop | default: 8 }}rem !important;
+      padding-bottom: {{ section.settings.padding_bottom_desktop | default: 8 }}rem !important;
+    }
+  }
+
+  /* ============================================ */
+  /* ОТСТУПЫ МЕЖДУ КАРТОЧКАМИ */
+  /* ============================================ */
+  .weblegko-faq-gap {
+    gap: {{ section.settings.gap_mobile | default: 1.5 }}rem !important;
+  }
+
+  @media screen and (min-width: 640px) {
+    .weblegko-faq-gap {
+      gap: {{ section.settings.gap_tablet | default: 2 }}rem !important;
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    .weblegko-faq-gap {
+      gap: {{ section.settings.gap_desktop | default: 2.5 }}rem !important;
+    }
+  }
+
+  /* ============================================ */
+  /* FAQ СТИЛИ */
+  /* ============================================ */
   /* Убираем стандартный треугольник браузера */
   summary::-webkit-details-marker {
     display: none;
@@ -16,11 +60,11 @@
   details[open] summary .faq-icon-minus {
     opacity: 1;
   }
-{%- endstyle -%}
+</style>
 
 <!-- Слегка серый фон, чтобы белые карточки выделялись -->
 <section class="tw:bg-seriy tw:text-grayscale-950 tw:px-[1.6rem]">
-  <div class="tw:max-w-[112rem] tw:mx-auto tw:py-[5rem] tw:md:py-[6.4rem]">
+  <div class="weblegko-faq-padding tw:max-w-[112rem] tw:mx-auto">
     <!-- Заголовок секции -->
     {%- if section.settings.heading != blank -%}
       <div class="tw:flex tw:flex-col tw:items-center tw:gap-[1rem] tw:mb-[3rem]">
@@ -41,7 +85,7 @@
 
     <!-- Контейнер для карточек -->
     <div
-      class="tw:flex tw:flex-col tw:gap-6 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+      class="weblegko-faq-gap tw:flex tw:flex-col {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
       {% if settings.animations_reveal_on_scroll %}
         data-cascade
         style="--animation-order: {{ forloop.index }};"
@@ -192,7 +236,7 @@
   "class": "section-faq",
   "settings": [
     {
-      "type": "text",
+      "type": "inline_richtext",
       "id": "heading",
       "default": "Frequently Asked Questions",
       "label": "Heading"
@@ -212,6 +256,108 @@
       "id": "review_count",
       "default": "2,847",
       "label": "Total number of reviews (e.g., 2,847)"
+    },
+    {
+      "type": "header",
+      "content": "🖥️ Desktop (≥ 1024px)"
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 2.5,
+      "unit": "rem",
+      "label": "Gap between items"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 20,
+      "step": 0.5,
+      "default": 8,
+      "unit": "rem",
+      "label": "Padding top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 20,
+      "step": 0.5,
+      "default": 8,
+      "unit": "rem",
+      "label": "Padding bottom"
+    },
+    {
+      "type": "header",
+      "content": "💻 Tablet (640px - 1024px)"
+    },
+    {
+      "type": "range",
+      "id": "gap_tablet",
+      "min": 0,
+      "max": 4,
+      "step": 0.5,
+      "default": 2,
+      "unit": "rem",
+      "label": "Gap between items"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_tablet",
+      "min": 0,
+      "max": 15,
+      "step": 0.5,
+      "default": 5,
+      "unit": "rem",
+      "label": "Padding top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_tablet",
+      "min": 0,
+      "max": 15,
+      "step": 0.5,
+      "default": 5,
+      "unit": "rem",
+      "label": "Padding bottom"
+    },
+    {
+      "type": "header",
+      "content": "📱 Mobile (< 640px)"
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "min": 0,
+      "max": 3,
+      "step": 0.5,
+      "default": 1.5,
+      "unit": "rem",
+      "label": "Gap between items"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 3,
+      "unit": "rem",
+      "label": "Padding top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 3,
+      "unit": "rem",
+      "label": "Padding bottom"
     }
   ],
   "blocks": [

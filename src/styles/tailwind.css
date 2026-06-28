@@ -3,6 +3,7 @@
 
 @import "./fonts.css";
 @import "./weblegko-buttons.css";
+@import "./weblegko-lightbox.css";
 
 html {
   scrollbar-gutter: stable;

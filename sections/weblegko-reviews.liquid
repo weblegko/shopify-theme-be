@@ -1,25 +1,61 @@
 <!-- sections/custom-reviews.liquid -->
 
-{%- style -%}
-  /* Настраиваем CSS-переменные для управления логикой рядов */
-  #reviews-grid {
-    --grid-cols: 1;
-    --initial-items: 3;
+<style>
+  /* ============================================ */
+  /* ПАДДИНГИ СЕКЦИИ (rem) - inline стили */
+  /* ============================================ */
+  .weblegko-reviews-padding {
+    padding-top: {{ section.settings.padding_top_mobile | default: 3 }}rem !important;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 3 }}rem !important;
   }
-  @media (min-width: 768px) {
-    #reviews-grid {
-      --grid-cols: 2;
-      --initial-items: 4;
-    }
-  }
-  @media (min-width: 1024px) {
-    #reviews-grid {
-      --grid-cols: 3;
-      --initial-items: 6;
+
+  @media screen and (min-width: 640px) {
+    .weblegko-reviews-padding {
+      padding-top: {{ section.settings.padding_top_tablet | default: 5 }}rem !important;
+      padding-bottom: {{ section.settings.padding_bottom_tablet | default: 5 }}rem !important;
     }
   }
 
+  @media screen and (min-width: 1024px) {
+    .weblegko-reviews-padding {
+      padding-top: {{ section.settings.padding_top_desktop | default: 8 }}rem !important;
+      padding-bottom: {{ section.settings.padding_bottom_desktop | default: 8 }}rem !important;
+    }
+  }
+
+  /* ============================================ */
+  /* GRID С БРЕЙКПОИНТАМИ (колонки, gap, initial items) */
+  /* ============================================ */
+
+  #reviews-grid {
+    display: grid !important;
+    grid-template-columns: repeat({{ section.settings.columns_mobile | default: 1 }}, 1fr) !important;
+    gap: {{ section.settings.row_gap_mobile | default: 1.5 }}rem {{ section.settings.col_gap_mobile | default: 1.5 }}rem !important;
+    --grid-cols: {{ section.settings.columns_mobile | default: 1 }};
+    --initial-items: {{ section.settings.initial_items_mobile | default: 1 }};
+  }
+
+  @media screen and (min-width: 640px) and (max-width: 1023px) {
+    #reviews-grid {
+      grid-template-columns: repeat({{ section.settings.columns_tablet | default: 2 }}, 1fr) !important;
+      gap: {{ section.settings.row_gap_tablet | default: 2 }}rem {{ section.settings.col_gap_tablet | default: 2 }}rem !important;
+      --grid-cols: {{ section.settings.columns_tablet | default: 2 }};
+      --initial-items: {{ section.settings.initial_items_tablet | default: 2 }};
+    }
+  }
+
+  @media screen and (min-width: 1024px) {
+    #reviews-grid {
+      grid-template-columns: repeat({{ section.settings.columns_desktop | default: 3 }}, 1fr) !important;
+      gap: {{ section.settings.row_gap_desktop | default: 2.5 }}rem {{ section.settings.col_gap_desktop | default: 2.5 }}rem !important;
+      --grid-cols: {{ section.settings.columns_desktop | default: 3 }};
+      --initial-items: {{ section.settings.initial_items_desktop | default: 3 }};
+    }
+  }
+
+  /* ============================================ */
   /* Анимация "вырастания" карточки снизу */
+  /* ============================================ */
   @keyframes fadeGrowIn {
     from {
       opacity: 0;
@@ -34,7 +70,7 @@
   .review-item-animate {
     animation: fadeGrowIn 0.5s ease-out forwards;
   }
-{%- endstyle -%}
+</style>
 
 <!-- Фолбэк для отключенного JS: показываем все карточки и прячем кнопку -->
 <noscript>
@@ -49,7 +85,7 @@
 </noscript>
 
 <section class="tw:bg-seriy tw:text-grayscale-950 tw:px-[1.6rem]">
-  <div class="tw:max-w-[112rem] tw:mx-auto tw:pt-[5rem] tw:pb-[5rem] tw:md:pt-[12.8rem] tw:md:pb-[6.4rem]">
+  <div class="weblegko-reviews-padding tw:max-w-[112rem] tw:mx-auto">
     <!-- Заголовок секции -->
     {%- if section.settings.heading != blank -%}
       <div class="tw:flex tw:flex-col tw:items-center tw:gap-[1rem] tw:mb-[2.5rem] tw:md:mb-[3rem]">
@@ -70,7 +106,7 @@
     <!-- Сетка карточек -->
     <div
       id="reviews-grid"
-      class="tw:grid tw:grid-cols-1 tw:md:grid-cols-2 tw:lg:grid-cols-3 tw:gap-8 {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+      class="{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
       {% if settings.animations_reveal_on_scroll %}
         data-cascade
         style="--animation-order: {{ forloop.index }};"
@@ -80,8 +116,8 @@
         <div class="review-item tw:hidden" {{ block.shopify_attributes }}>
           <!-- card -->
           <a
-            href="{{ block.settings.review_link }}"
-            class="tw:hover:scale-[101%] tw:hover:shadow-lg tw:transition-all tw:duration-300 tw:bg-white tw:rounded-[1.2rem] tw:p-[1.5rem] tw:h-full tw:flex tw:flex-col"
+            href="{{ block.settings.review_link | default: '#' }}"
+            class="tw:hover:shadow-lg tw:hover:scale-[101%] tw:transition-all tw:duration-300 tw:bg-white tw:rounded-[1.2rem] tw:p-[1.5rem] tw:h-full tw:flex tw:flex-col"
           >
             <!-- Звезды (Динамический вывод из настроек) -->
             <div class="tw:flex tw:gap-1 tw:mb-4">
@@ -165,55 +201,97 @@
       return;
     }
 
-    let currentVisible = 0;
-    let isLoading = false;
+    // Сброс при Hot Reload
+    btn.style.display = '';
+    btn.disabled = false;
+    if (loader) loader.classList.add('tw:hidden');
+    if (btnText) btnText.textContent = 'Show More Reviews';
+
+    items.forEach((item) => {
+      item.classList.add('tw:hidden');
+      item.classList.remove('review-item-animate');
+    });
+
+    grid.dataset.visible = 0;
 
     function getCSSVar(varName) {
       return parseInt(getComputedStyle(grid).getPropertyValue(varName)) || 1;
     }
 
     function showItems(count) {
+      let currentVisible = parseInt(grid.dataset.visible) || 0;
       const totalToShow = Math.min(currentVisible + count, items.length);
 
       for (let i = currentVisible; i < totalToShow; i++) {
-        const item = items[i];
-        item.classList.remove('tw:hidden');
-        item.classList.add('review-item-animate');
+        items[i].classList.remove('tw:hidden');
+        items[i].classList.add('review-item-animate');
       }
 
-      currentVisible = totalToShow;
+      grid.dataset.visible = totalToShow;
 
-      if (currentVisible >= items.length) {
+      if (totalToShow >= items.length) {
         btn.style.display = 'none';
       }
     }
 
     const initialItems = getCSSVar('--initial-items');
     showItems(initialItems);
+  }
 
+  // Глобальный слушатель (Event Delegation)
+  if (!window.reviewsListenerAdded) {
     document.addEventListener('click', function (e) {
-      if (e.target.closest('#reviews-show-more-btn') && !isLoading) {
-        isLoading = true;
+      const btn = e.target.closest('#reviews-show-more-btn');
+      if (btn && !btn.disabled) {
+        const grid = document.getElementById('reviews-grid');
+        const loader = document.getElementById('reviews-loader');
+        const btnText = document.getElementById('reviews-btn-text');
 
-        loader.classList.remove('tw:hidden');
-        btnText.textContent = 'Loading...';
+        if (!grid) return;
+
         btn.disabled = true;
+        if (loader) loader.classList.remove('tw:hidden');
+        if (btnText) btnText.textContent = 'Loading...';
 
         setTimeout(function () {
-          loader.classList.add('tw:hidden');
-          btnText.textContent = 'Show More Reviews';
+          if (loader) loader.classList.add('tw:hidden');
+          if (btnText) btnText.textContent = 'Show More Reviews';
           btn.disabled = false;
 
-          const gridCols = getCSSVar('--grid-cols');
-          showItems(gridCols);
+          const gridCols = parseInt(getComputedStyle(grid).getPropertyValue('--grid-cols')) || 1;
 
-          isLoading = false;
+          let currentVisible = parseInt(grid.dataset.visible) || 0;
+          const items = grid.querySelectorAll('.review-item');
+          const totalToShow = Math.min(currentVisible + gridCols, items.length);
+
+          for (let i = currentVisible; i < totalToShow; i++) {
+            items[i].classList.remove('tw:hidden');
+            items[i].classList.add('review-item-animate');
+          }
+
+          grid.dataset.visible = totalToShow;
+
+          if (totalToShow >= items.length) {
+            btn.style.display = 'none';
+          }
         }, 1000);
       }
     });
+    window.reviewsListenerAdded = true;
   }
 
-  document.addEventListener('DOMContentLoaded', initReviews);
+  // ЗАПУСК
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initReviews);
+  } else {
+    initReviews();
+  }
+
+  document.addEventListener('shopify:section:load', (e) => {
+    if (e.target.querySelector('#reviews-grid')) {
+      initReviews();
+    }
+  });
 </script>
 
 {% schema %}
@@ -223,7 +301,7 @@
   "class": "section-reviews",
   "settings": [
     {
-      "type": "text",
+      "type": "inline_richtext",
       "id": "heading",
       "default": "What Our Customers Say",
       "label": "Heading"
@@ -243,6 +321,192 @@
       "id": "review_count",
       "default": "2,847",
       "label": "Total number of reviews (e.g., 2,847)"
+    },
+    {
+      "type": "header",
+      "content": "🖥️ Desktop (≥ 1024px)"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3,
+      "label": "Number of columns"
+    },
+    {
+      "type": "range",
+      "id": "initial_items_desktop",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 3,
+      "label": "Initial items to show"
+    },
+    {
+      "type": "range",
+      "id": "col_gap_desktop",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 2.5,
+      "unit": "rem",
+      "label": "Column gap"
+    },
+    {
+      "type": "range",
+      "id": "row_gap_desktop",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 2.5,
+      "unit": "rem",
+      "label": "Row gap (vertical)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 20,
+      "step": 0.5,
+      "default": 8,
+      "unit": "rem",
+      "label": "Padding top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": 0,
+      "max": 20,
+      "step": 0.5,
+      "default": 8,
+      "unit": "rem",
+      "label": "Padding bottom"
+    },
+    {
+      "type": "header",
+      "content": "💻 Tablet (640px - 1024px)"
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2,
+      "label": "Number of columns"
+    },
+    {
+      "type": "range",
+      "id": "initial_items_tablet",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 2,
+      "label": "Initial items to show"
+    },
+    {
+      "type": "range",
+      "id": "col_gap_tablet",
+      "min": 0,
+      "max": 4,
+      "step": 0.5,
+      "default": 2,
+      "unit": "rem",
+      "label": "Column gap"
+    },
+    {
+      "type": "range",
+      "id": "row_gap_tablet",
+      "min": 0,
+      "max": 4,
+      "step": 0.5,
+      "default": 2,
+      "unit": "rem",
+      "label": "Row gap (vertical)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_tablet",
+      "min": 0,
+      "max": 15,
+      "step": 0.5,
+      "default": 5,
+      "unit": "rem",
+      "label": "Padding top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_tablet",
+      "min": 0,
+      "max": 15,
+      "step": 0.5,
+      "default": 5,
+      "unit": "rem",
+      "label": "Padding bottom"
+    },
+    {
+      "type": "header",
+      "content": "📱 Mobile (< 640px)"
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1,
+      "label": "Number of columns"
+    },
+    {
+      "type": "range",
+      "id": "initial_items_mobile",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 1,
+      "label": "Initial items to show"
+    },
+    {
+      "type": "range",
+      "id": "col_gap_mobile",
+      "min": 0,
+      "max": 3,
+      "step": 0.5,
+      "default": 1.5,
+      "unit": "rem",
+      "label": "Column gap"
+    },
+    {
+      "type": "range",
+      "id": "row_gap_mobile",
+      "min": 0,
+      "max": 3,
+      "step": 0.5,
+      "default": 1.5,
+      "unit": "rem",
+      "label": "Row gap (vertical)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 3,
+      "unit": "rem",
+      "label": "Padding top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 3,
+      "unit": "rem",
+      "label": "Padding bottom"
     }
   ],
   "blocks": [
@@ -281,12 +545,11 @@
           "type": "textarea",
           "id": "review_short_text",
           "default": "I can only tell you that in the beginning I was interested in probiotics because I had problems with my microbiome. Then I discovered other products and I appreciate the fact that they are natural. But I follow the advice of Eric Berg and eat a big salad every day. Now…",
-          "label": "Review shrot text"
+          "label": "Review short text"
         },
         {
-          "type": "text",
+          "type": "url",
           "id": "review_link",
-          "default": "https://example.com",
           "label": "Review link"
         }
       ]

@@ -1,5 +1,9 @@
 {
-  "sections": {
+  "sections": { 
+     "breadcrumbs": {
+      "type": "weblegko-breadcrumbs",
+      "settings": {}
+    },
     "main": {
       "type": "main-product",
       "blocks": {
@@ -64,6 +68,7 @@
         "padding_bottom": 12
       }
     },
+
     "related-products": {
       "type": "related-products",
       "settings": {
@@ -81,7 +86,7 @@
         "padding_top": 36,
         "padding_bottom": 28
       }
-    }    
+    }
   },
-  "order": ["main", "related-products"]
+  "order": ["breadcrumbs", "main", "related-products"]
 }

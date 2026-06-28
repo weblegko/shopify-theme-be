@@ -1,14 +1,29 @@
 <!-- sections/footer.liquid -->
 {%- liquid
   assign is_homepage = false
+  assign is_product = false
+  assign is_collection = false
+  assign is_cart = false
+  
   if template == 'index'
     assign is_homepage = true
   endif
+  
+  if template == 'product'
+    assign is_product = true
+  endif
+  
+  if template == 'collection'
+    assign is_collection = true
+  endif
+  
+  if template == 'cart'
+    assign is_cart = true
+  endif
 -%}
 
-
-<footer class="tw:md:mt-[4rem] tw:bg-seriy tw:relative tw:px-[1.6rem]">
-  <div class="{% if is_homepage %}tw:max-w-[112rem] {% else %}page-width {% endif %} tw:mx-auto tw:!pt-[5rem] tw:!pb-[6rem] ">
+<footer class="tw:bg-seriy tw:relative tw:px-[1.6rem]">
+  <div class="{% if is_homepage or is_product %}tw:max-w-[112rem] {% else %}page-width {% endif %} tw:mx-auto tw:!pt-[5rem] tw:!pb-[6rem] ">
     <!-- ========================================== -->
     <!-- ПЕРВЫЙ РЯД (50% / 50%) -->
     <!-- ========================================== -->
