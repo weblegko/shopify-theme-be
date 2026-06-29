@@ -73,7 +73,7 @@
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: all 0.7s ease;
     pointer-events: none;
     z-index: 5;
     backdrop-filter: blur(4px);
@@ -91,6 +91,7 @@
 
   .main-swiper-wrapper:hover .zoom-icon {
     opacity: 1;
+    transform: translate(-50%, -50%) scale(1.4);
   }
 
   /* ============================================ */
@@ -362,7 +363,7 @@
       // ==========================================
       // ПАРАЛЛАКС ЭФФЕКТ
       // ==========================================
-      {% comment %} const wrapper = document.querySelector('.main-swiper-wrapper');
+     const wrapper = document.querySelector('.main-swiper-wrapper');
       if (wrapper) {
         wrapper.addEventListener('mousemove', function(e) {
           const rect = this.getBoundingClientRect();
@@ -387,7 +388,7 @@
             }
           }
         });
-      } {% endcomment %}
+      } 
 
       // Скрываем варианты, если нужно
       {% if section.settings.hide_variants %}
